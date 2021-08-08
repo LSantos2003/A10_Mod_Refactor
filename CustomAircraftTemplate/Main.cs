@@ -36,9 +36,13 @@ namespace A10Mod
 
 
             string pathToBundle = Path.Combine(instance.ModFolder, AircraftInfo.AircraftAssetbundleName);
+
             Debug.Log(pathToBundle);
             aircraftPrefab = FileLoader.GetAssetBundleAsGameObject(pathToBundle, AircraftInfo.AircraftPrefabName);
-            GameObject ANAL = FileLoader.GetAssetBundleAsGameObject(pathToBundle, "A-10C_ECM_Jammer"); // throwback moment
+            Debug.Log("Got le " + aircraftPrefab.name);
+
+            //Loads in the jammer
+            GameObject ANAL = FileLoader.GetAssetBundleAsGameObject(pathToBundle, "A-10C_ECM_Jammer.prefab"); // throwback moment
             ECMJammerPrefab = Instantiate(ANAL);
             ECMJammerPrefab.transform.localScale = new Vector3(2.8f, 2.8f, 2.8f);
             HPEquippable analEquip = ECMJammerPrefab.AddComponent<HPEquipRadarJammer>();
@@ -55,7 +59,7 @@ namespace A10Mod
             DontDestroyOnLoad(ECMJammerPrefab);
             ECMJammerPrefab.SetActive(false);
 
-            Debug.Log("Got le " + aircraftPrefab.name);
+            Debug.Log("Got le " + ECMJammerPrefab.name);
 
             //Adds the custom plane to the main menu
             StartCoroutine(AircraftAPI.CreatePlaneMenuItem());

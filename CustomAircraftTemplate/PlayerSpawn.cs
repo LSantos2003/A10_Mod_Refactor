@@ -39,7 +39,7 @@ namespace A10Mod
                 UnityMover mover = __instance.gameObject.AddComponent<UnityMover>();
                 mover.gs = __instance.gameObject;
                 mover.FileName = AircraftInfo.UnityMoverFileName;
-                //mover.load(true);
+                mover.load(true);
                
 
              
@@ -94,7 +94,10 @@ namespace A10Mod
                 //Fixes the weird shifting nav map bug. Must be called after unity mover
                 AircraftSetup.ScaleNavMap();
 
+                //Changes mfd color to green
+                AircraftSetup.SetUpMFD();
 
+                AircraftSetup.SetUpGauges();
                 //AircraftAPI.FindInteractable("Toggle Altitude Mode").OnInteract.AddListener(logRCS);
 
 

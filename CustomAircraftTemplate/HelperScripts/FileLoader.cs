@@ -30,6 +30,7 @@ namespace A10Mod
             {
                 var temp = bundle.LoadAsset(name, typeof(GameObject));
                 Debug.Log("AssetBundleLoader: Success.");
+                bundle.Unload(false);
                 return (GameObject)temp;
             }
             catch (Exception e)

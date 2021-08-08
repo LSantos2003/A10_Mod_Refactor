@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace A10Mod
 {
@@ -83,6 +84,31 @@ namespace A10Mod
             a10LeftFlapsMover.setValues(a10LeftFlaps.transform.localPosition, new Vector3(0.561f, 0.658f, -0.6167379f), 1, new Vector3(0, 0, 0), new Vector3(0, 0, -13));
             flapsLever.OnSetState.AddListener(a10LeftFlapsMover.leverListner);
 
+
+
+
+        }
+
+        public static void SetUpGauges()
+        {
+            Battery battery = Fa26.GetComponentInChildren<Battery>(true);
+            FlightInfo flightInfo = Fa26.GetComponentInChildren<FlightInfo>(true);
+
+            //AOA Gauge
+            GameObject aoaGauge = AircraftAPI.GetChildWithName(customAircraft, "AOAGauge");
+            DashAOAGauge aoa = aoaGauge.AddComponent<DashAOAGauge>();
+            aoa.battery = battery;
+            aoa.dialHand = AircraftAPI.GetChildWithName(aoaGauge, "dialHand").transform;
+            aoa.axis = new Vector3(0, 1, 0);
+            aoa.arcAngle = 360;
+            aoa.maxValue = 40;
+            aoa.lerpRate = 8;
+            aoa.loop = true;
+            aoa.gizmoRadius = 0.02f;
+            aoa.gizmoHeight = 0.005f;
+            aoa.doCalibration = true;
+            aoa.calibrationSpeed = 1;
+            aoa.info = flightInfo;
 
 
 
@@ -286,11 +312,27 @@ namespace A10Mod
             }
         }
 
+        public static void SetUpMFD()
+        {
+            foreach (Text text in AircraftAPI.GetChildWithName(Fa26, "MFD1").GetComponentsInChildren<Text>(true))
+            {
+                text.color = new Color32(21, 175, 37, 255);
+            }
+
+            foreach (Text text in AircraftAPI.GetChildWithName(Fa26, "MFD2").GetComponentsInChildren<Text>(true))
+            {
+                text.color = new Color32(21, 175, 37, 255);
+            }
+            Debug.Log("Set all MFD Text to Green");
+        }
+
         public static void SetWingFold()
         {
             Main.instance.StartCoroutine(WingFoldRoutine());
 
         }
+
+
 
         public static IEnumerator WingFoldRoutine()
         {

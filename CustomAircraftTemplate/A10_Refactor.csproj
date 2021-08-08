@@ -99,6 +99,7 @@
     <Compile Include="CustomClasses\FlapsAnimator.cs" />
     <Compile Include="CustomClasses\HPEquipRadarJammer.cs" />
     <Compile Include="CustomClasses\RadarJammer.cs" />
+    <Compile Include="Instruments\DashAOAGauge.cs" />
     <Compile Include="Multiplayer\AiSetup.cs" />
     <Compile Include="HelperScripts\AircraftAPI.cs" />
     <Compile Include="AircraftInfo.cs" />
