@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace CustomAircraftTemplate
+namespace A10Mod
 {
     class AircraftAPI
     {
@@ -163,7 +163,7 @@ namespace CustomAircraftTemplate
 
 
         //Turns an object into a control surface
-        public static void createControlSurface(AeroController controller, Transform surface, Vector3 axis, float maxDeflection, float actuatorSpeed, float pitchFactor, float rollFactor,
+        public static void CreateControlSurface(AeroController controller, Transform surface, Vector3 axis, float maxDeflection, float actuatorSpeed, float pitchFactor, float rollFactor,
                                                 float yawFactor, float brakeFactor, float aoaLimit, bool oneDirectional, float trim, float flapFactor)
         {
             AeroController.ControlSurfaceTransform newSurface = new AeroController.ControlSurfaceTransform();

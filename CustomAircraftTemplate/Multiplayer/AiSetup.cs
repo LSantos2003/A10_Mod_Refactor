@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace CustomAircraftTemplate
+namespace A10Mod
 {
     class AiSetup : MonoBehaviour
     {
@@ -58,14 +58,14 @@ namespace CustomAircraftTemplate
 			AeroController controller = aiAircraft.GetComponentInChildren<AeroController>();
 
 			//Aileron Example
-			AircraftAPI.createControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "l_Wing_CS_1").transform, new Vector3(0, 0, 1), 35, 70, 0, 1, 0, 0, 20, false, 0, 0);
-			AircraftAPI.createControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "r_Wing_CS_1").transform, new Vector3(0, 0, -1), 35, 70, 0, 1, 0, 0, 20, false, 0, 0);
+			AircraftAPI.CreateControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "l_Wing_CS_1").transform, new Vector3(0, 0, 1), 35, 70, 0, 1, 0, 0, 20, false, 0, 0);
+			AircraftAPI.CreateControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "r_Wing_CS_1").transform, new Vector3(0, 0, -1), 35, 70, 0, 1, 0, 0, 20, false, 0, 0);
 
-			AircraftAPI.createControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "l_Rudder_Tip").transform, new Vector3(0, 1, 0), 25, 50, 0.6f, 0, -0.4f, 0, 20, false, 0, 0);
-			AircraftAPI.createControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "r_Rudder_Tip").transform, new Vector3(0, -1, 0), 25, 50, 0.6f, 0, 0.4f, 0, 20, false, 0, 0);
+			AircraftAPI.CreateControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "l_Rudder_Tip").transform, new Vector3(0, 1, 0), 25, 50, 0.6f, 0, -0.4f, 0, 20, false, 0, 0);
+			AircraftAPI.CreateControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "r_Rudder_Tip").transform, new Vector3(0, -1, 0), 25, 50, 0.6f, 0, 0.4f, 0, 20, false, 0, 0);
 
-			AircraftAPI.createControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "l_Wing_CS_2").transform, new Vector3(1, 0, 0), 35, 40, 0f, 0, 0f, 0, -1, true, 0, 1);
-			AircraftAPI.createControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "r_Wing_CS_2").transform, new Vector3(-1, 0, 0), 35, 40, 0f, 0, 0f, 0, -1, true, 0, 1);
+			AircraftAPI.CreateControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "l_Wing_CS_2").transform, new Vector3(1, 0, 0), 35, 40, 0f, 0, 0f, 0, -1, true, 0, 1);
+			AircraftAPI.CreateControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "r_Wing_CS_2").transform, new Vector3(-1, 0, 0), 35, 40, 0f, 0, 0f, 0, -1, true, 0, 1);
 		}
 
 		public static void SetUpRCS(GameObject aiAircraft)

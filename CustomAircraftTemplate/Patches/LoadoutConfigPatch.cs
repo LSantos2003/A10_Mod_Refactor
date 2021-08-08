@@ -7,39 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomAircraftTemplate
+namespace A10Mod
 {
 
     [HarmonyPatch(typeof(LoadoutConfigurator), "Initialize")]
     public static class LoadoutConfigStartPatch
     {
-        public static bool Prefix(LoadoutConfigurator __instance)
-        {
 
-            if (!AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B) return true;
-
-            Transform parent = AircraftAPI.GetChildWithName(__instance.gameObject, "vtImage").transform;
-
-            const string hpInfo = "HardpointInfo";
-            parent.Find(hpInfo).gameObject.SetActive(false);
-            for (int i = 1; i <= 10; i++)
-            {
-                parent.Find(hpInfo + " (" + i + ")").gameObject.SetActive(false);
-            }
-            RectTransform rectTransform = parent.Find(hpInfo + " (11)").GetComponent<RectTransform>();
-            rectTransform.localPosition = new Vector3(154.2f, -114f, -2.4f);
-            rectTransform.localScale = new Vector3(2, 2, 2);
-            rectTransform = parent.Find(hpInfo + " (12)").GetComponent<RectTransform>();
-            rectTransform.localPosition = new Vector3(-154.2f, -114f, -2.4f);
-            rectTransform.localScale = new Vector3(2, 2, 2);
-
-
-            parent.Find(hpInfo + " (13)").gameObject.SetActive(false);
-            parent.Find(hpInfo + " (14)").gameObject.SetActive(false);
-            parent.Find(hpInfo + " (15)").gameObject.SetActive(false);
-
-            return true;
-        }
 
         public static void Postfix(LoadoutConfigurator __instance)
         {
@@ -47,11 +21,8 @@ namespace CustomAircraftTemplate
             if (!AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B) return;
 
             //Detaches the weapons from the aircraft
-            Main.instance.StartCoroutine(DetachRoutine(__instance));
+            //Main.instance.StartCoroutine(DetachRoutine(__instance));
 
-            __instance.AttachImmediate("fa26_tgp", 14);
-            __instance.lockedHardpoints.Add(14);
-            AircraftAPI.DisableMesh(AircraftAPI.GetChildWithName(Main.playerGameObject, "HP14 TGP"));
 
 
         }

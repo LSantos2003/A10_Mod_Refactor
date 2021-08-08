@@ -6,15 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomAircraftTemplate
+namespace A10Mod
 {
     [HarmonyPatch(typeof(WeaponManager), nameof(WeaponManager.Awake))]
     class PlayerSpawnAwakePatch
     {
 
-        private static Vector3 aircraftLocalPosition = new Vector3(0, 0.869f, 1.707f);
-        private static Vector3 aircraftLocalEuler = new Vector3(0, 90, 0);
-        private static Vector3 aircraftLocalScale= new Vector3(5f, 5f, 5f);
+        private static Vector3 aircraftLocalPosition = new Vector3(0.127f, -1.971f, 0.389f);
+        private static Vector3 aircraftLocalEuler = new Vector3(0.02f, 89.00f, 1.04f);
+        private static Vector3 aircraftLocalScale= Vector3.one * 2.745594f;
        
 
         public static void Prefix(WeaponManager __instance)
@@ -39,12 +39,12 @@ namespace CustomAircraftTemplate
                 UnityMover mover = __instance.gameObject.AddComponent<UnityMover>();
                 mover.gs = __instance.gameObject;
                 mover.FileName = AircraftInfo.UnityMoverFileName;
-                mover.load(true);
+                //mover.load(true);
                
 
              
 
-                FlightLogger.Log("About to add nighthawk");
+                FlightLogger.Log("About to add warthog");
 
 
 
@@ -68,13 +68,11 @@ namespace CustomAircraftTemplate
                 AircraftSetup.CreateLandingGear();
 
                 //Moves the hardpoints in the correct location
-                AircraftSetup.SetUpHardpoints();
+                //AircraftSetup.SetUpHardpoints();
 
                 //Attaches the refuel port animation to the refuel port class
                 AircraftSetup.SetUpRefuelPort();
 
-                //Makes tgp invisible everytime it's equipped
-                AircraftSetup.SetUpInvisTGP();
 
                 //Assigns the suspension components to the custom aircraft landing gear
                 AircraftSetup.SetUpWheels();
@@ -83,26 +81,19 @@ namespace CustomAircraftTemplate
                 AircraftSetup.SetUpEngines();
 
                 //Changes depth and scale of the hud to make it legible
-                AircraftSetup.SetUpHud();
+                //AircraftSetup.SetUpHud();
 
-                AircraftSetup.SetUpMissileLaunchers();
+                //AircraftSetup.SetUpMissileLaunchers();
 
                 //Disables the Fa26's wingflex so nav lights don't get screwy
                 AircraftSetup.DisableWingFlex();
+
                 //Assigns the correct variables for the EOTS
                 //AircraftSetup.SetUpEOTS();
 
                 //Fixes the weird shifting nav map bug. Must be called after unity mover
                 AircraftSetup.ScaleNavMap();
 
-                
-                List<InternalWeaponBay> bays = new List<InternalWeaponBay>();
-                foreach (InternalWeaponBay bay in aircraft.GetComponentsInChildren<InternalWeaponBay>(true))
-                {
-                    bay.weaponManager = __instance;
-                    bays.Add(bay);
-
-                }
 
                 //AircraftAPI.FindInteractable("Toggle Altitude Mode").OnInteract.AddListener(logRCS);
 
@@ -139,10 +130,10 @@ namespace CustomAircraftTemplate
             {
 
                 //Makes missiles compatabile with the internal bays
-                AircraftSetup.SetUpMissileLaunchers();
+                //AircraftSetup.SetUpMissileLaunchers();
 
                 //Reduces the rcs of the fa-26 and intiially sets the hard point rcs to 0
-                AircraftSetup.SetUpRCS();
+                //AircraftSetup.SetUpRCS();
 
                 //Folds the wings down on spawn. Runs a coroutine that waits one second to do so
                 AircraftSetup.SetWingFold();

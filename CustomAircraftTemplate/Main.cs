@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace CustomAircraftTemplate
+namespace A10Mod
 {
     public class Main : VTOLMOD
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CustomAircraftTemplate
+namespace A10Mod
 {
 
     [HarmonyPatch(typeof(PilotSelectUI), "Start")]
