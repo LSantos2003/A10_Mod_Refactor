@@ -19,6 +19,7 @@ namespace A10Mod
 
         //Stores a prefab of the aircraft in order to spawn it in whenever you want
         public static GameObject aircraftPrefab;
+        public static GameObject ECMJammerPrefab;
 
         public static GameObject playerGameObject;
         public MpPlugin plugin = null;
@@ -37,6 +38,22 @@ namespace A10Mod
             string pathToBundle = Path.Combine(instance.ModFolder, AircraftInfo.AircraftAssetbundleName);
             Debug.Log(pathToBundle);
             aircraftPrefab = FileLoader.GetAssetBundleAsGameObject(pathToBundle, AircraftInfo.AircraftPrefabName);
+            GameObject ANAL = FileLoader.GetAssetBundleAsGameObject(pathToBundle, "A-10C_ECM_Jammer"); // throwback moment
+            ECMJammerPrefab = Instantiate(ANAL);
+            ECMJammerPrefab.transform.localScale = new Vector3(2.8f, 2.8f, 2.8f);
+            HPEquippable analEquip = ECMJammerPrefab.AddComponent<HPEquipRadarJammer>();
+
+            analEquip.allowedHardpoints = "1";
+            analEquip.shortName = "ECM Jammer";
+            analEquip.name = "AN/ALQ-131";
+            analEquip.fullName = "AN/ALQ-131";
+            analEquip.description = "A jamming pod capable of jamming AAA, SAM, or Air radars.";
+            analEquip.jettisonable = false;
+            analEquip.armable = false;
+            analEquip.unitCost = 20000f;
+            AircraftAPI.GetChildWithName(ECMJammerPrefab, "A-10C_ECM_Jammer_Model").AddComponent<RadarJammer>();
+            DontDestroyOnLoad(ECMJammerPrefab);
+            ECMJammerPrefab.SetActive(false);
 
             Debug.Log("Got le " + aircraftPrefab.name);
 
