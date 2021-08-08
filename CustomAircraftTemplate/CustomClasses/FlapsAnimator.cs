@@ -16,6 +16,7 @@ namespace A10Mod
     class FlapsAnimator : MonoBehaviour
     {
         //This class is used to control the flaps, since they move out 
+        int cum = 69;
 
         public Vector3 initPos;
         public Vector3 finalPos;
