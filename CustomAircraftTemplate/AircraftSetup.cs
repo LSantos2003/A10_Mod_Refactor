@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.Events;
 
 namespace A10Mod
 {
@@ -14,6 +16,23 @@ namespace A10Mod
         public static GameObject Fa26;
         public static GameObject customAircraft;
 
+        //Destroys or enables gameobjects that are inactive
+        //Useful for spawning in the ai version of the a-10 without having to create a new assetbundle
+        public static void GameObjectCheck(bool deleteObject)
+        {
+            foreach(GameObject go in customAircraft.GetComponentsInChildren<GameObject>(true))
+            {
+                if (!go.activeSelf && deleteObject)
+                {
+                    GameObject.Destroy(go);
+                }else if (!go.activeSelf)
+                {
+                    go.SetActive(true);
+                }
+            }
+        }
+
+       
         public static void CreateCanopyAnimation()
         {
             WeaponManager wm = Fa26.GetComponentInChildren<WeaponManager>(true);
@@ -91,8 +110,26 @@ namespace A10Mod
 
         public static void SetUpGauges()
         {
+
+            //Intially gets nessesary components for the gauges
             Battery battery = Fa26.GetComponentInChildren<Battery>(true);
             FlightInfo flightInfo = Fa26.GetComponentInChildren<FlightInfo>(true);
+
+            ModuleEngine engineL = null;
+            ModuleEngine engineR = null;
+            foreach (ModuleEngine engine in Fa26.GetComponentsInChildren<ModuleEngine>(true))
+            {
+                if (engine.name.ToLower().Contains("left"))
+                {
+                    engineL = engine;
+                }
+                else
+                {
+                    engineR = engine;
+                }
+
+            }
+
 
             //AOA Gauge
             GameObject aoaGauge = AircraftAPI.GetChildWithName(customAircraft, "AOAGauge");
@@ -111,6 +148,258 @@ namespace A10Mod
             aoa.info = flightInfo;
 
 
+            GameObject accelGauge = AircraftAPI.GetChildWithName(customAircraft, "AccelGauge");
+            DashAccelGauge accel = accelGauge.AddComponent<DashAccelGauge>();
+            accel.battery = battery;
+            accel.dialHand = AircraftAPI.GetChildWithName(accelGauge, "dialHand").transform;
+            accel.axis = new Vector3(0, 1, 0);
+            accel.arcAngle = 360;
+            accel.maxValue = 20;
+            accel.lerpRate = 8;
+            accel.loop = true;
+            accel.gizmoRadius = 0.02f;
+            accel.gizmoHeight = 0.005f;
+            accel.doCalibration = true;
+            accel.calibrationSpeed = 1;
+            accel.info = flightInfo;
+
+
+            GameObject vertGauge = AircraftAPI.GetChildWithName(customAircraft, "ClimbGauge");
+            DashVertGauge vert = vertGauge.AddComponent<DashVertGauge>();
+            vert.battery = battery;
+            vert.dialHand = AircraftAPI.GetChildWithName(vertGauge, "dialHand").transform;
+            vert.axis = new Vector3(0, 1, 0);
+            vert.arcAngle = 360;
+            vert.maxValue = 10;
+            vert.lerpRate = 8;
+            vert.loop = true;
+            vert.gizmoRadius = 0.02f;
+            vert.gizmoHeight = 0.005f;
+            vert.doCalibration = true;
+            vert.calibrationSpeed = 1;
+            vert.info = flightInfo;
+            vert.measures = Fa26.GetComponent<MeasurementManager>();
+
+
+            GameObject leftDial = AircraftAPI.GetChildWithName(customAircraft, "LeftFuelDialParent");
+            leftDial.SetActive(false);
+            DashFuelNumGauge dashFuelL = leftDial.AddComponent<DashFuelNumGauge>();
+
+            dashFuelL.battery = battery;
+            dashFuelL.dialHand = AircraftAPI.GetChildWithName(leftDial, "LeftFuelDialTf").transform;
+            dashFuelL.axis = new Vector3(1, 0, 0);
+            dashFuelL.arcAngle = 155.211f;
+            dashFuelL.maxValue = 6;
+            dashFuelL.lerpRate = 5;
+            dashFuelL.loop = true;
+            dashFuelL.gizmoRadius = 0.02f;
+            dashFuelL.gizmoHeight = 0.005f;
+            dashFuelL.doCalibration = true;
+            dashFuelL.calibrationSpeed = 1;
+            dashFuelL.tank = Fa26.GetComponent<FuelTank>();
+
+            leftDial.SetActive(true);
+
+            GameObject rightDial = AircraftAPI.GetChildWithName(customAircraft, "RightFuelDialParent");
+            rightDial.SetActive(false);
+            DashFuelNumGauge dashFuelR = rightDial.AddComponent<DashFuelNumGauge>();
+
+            dashFuelR.battery = battery;
+            dashFuelR.dialHand = AircraftAPI.GetChildWithName(rightDial, "RightWingFuelArrow").transform;
+            dashFuelR.axis = new Vector3(1, 0, 0);
+            dashFuelR.arcAngle = -155.211f;
+            dashFuelR.maxValue = 6;
+            dashFuelR.lerpRate = 5;
+            dashFuelR.loop = true;
+            dashFuelR.gizmoRadius = 0.02f;
+            dashFuelR.gizmoHeight = 0.005f;
+            dashFuelR.doCalibration = true;
+            dashFuelR.calibrationSpeed = 1;
+            dashFuelR.tank = Fa26.GetComponent<FuelTank>();
+            rightDial.SetActive(true);
+
+
+            GameObject fuelGauge = AircraftAPI.GetChildWithName(customAircraft, "FuelGaugeParent");
+            DashFuelText fuelText = fuelGauge.AddComponent<DashFuelText>();
+            fuelText.tank = Fa26.GetComponent<FuelTank>();
+            fuelText.text = fuelGauge.GetComponentInChildren<TextMeshPro>(true);
+            fuelText.gauge = dashFuelR;
+
+
+
+
+            GameObject fuelFlowR = AircraftAPI.GetChildWithName(customAircraft, "FuelFlowGaugeR");
+
+            DashEngineFlow rightEngineFlow = fuelFlowR.AddComponent<DashEngineFlow>();
+            rightEngineFlow.battery = battery;
+            rightEngineFlow.dialHand = AircraftAPI.GetChildWithName(fuelFlowR, "needle1 (1)").transform;
+            rightEngineFlow.axis = new Vector3(0, 1, 0);
+            rightEngineFlow.arcAngle = 240;
+            rightEngineFlow.maxValue = 10.2f / 8;
+            rightEngineFlow.lerpRate = 8;
+            rightEngineFlow.loop = false;
+            rightEngineFlow.gizmoRadius = 0.022f;
+            rightEngineFlow.gizmoHeight = 0.006f;
+            rightEngineFlow.doCalibration = true;
+            rightEngineFlow.calibrationSpeed = 1.5f;
+            rightEngineFlow.engineToMeasure = engineR;
+            rightEngineFlow.engineToCheck = engineL;
+            rightEngineFlow.tank = Fa26.GetComponentInChildren<FuelTank>();
+
+
+            GameObject fuelFlowL = AircraftAPI.GetChildWithName(customAircraft, "FuelFlowGaugeL");
+
+            DashEngineFlow leftEngineFlow = fuelFlowL.AddComponent<DashEngineFlow>();
+            leftEngineFlow.battery = battery;
+            leftEngineFlow.dialHand = AircraftAPI.GetChildWithName(fuelFlowL, "needle1 (1)").transform;
+            leftEngineFlow.axis = new Vector3(0, 1, 0);
+            leftEngineFlow.arcAngle = 240;
+            leftEngineFlow.maxValue = 10.2f / 8;
+            leftEngineFlow.lerpRate = 8;
+            leftEngineFlow.loop = false;
+            leftEngineFlow.gizmoRadius = 0.022f;
+            leftEngineFlow.gizmoHeight = 0.006f;
+            leftEngineFlow.doCalibration = true;
+            leftEngineFlow.calibrationSpeed = 1.5f;
+            leftEngineFlow.engineToMeasure = engineL;
+            leftEngineFlow.engineToCheck = engineR;
+            leftEngineFlow.tank = Fa26.GetComponentInChildren<FuelTank>();
+
+           
+
+            GameObject tempGaugeR = AircraftAPI.GetChildWithName(customAircraft, "EngineRTemp");
+
+            DashTempGauge rightTempGauge = tempGaugeR.AddComponent<DashTempGauge>();
+            HeatEmitter rightEmitter = engineR.gameObject.GetComponent<HeatEmitter>();
+            rightTempGauge.battery = battery;
+            rightTempGauge.dialHand = AircraftAPI.GetChildWithName(tempGaugeR, "needle1 (1)").transform;
+            rightTempGauge.axis = new Vector3(0, 1, 0);
+            rightTempGauge.arcAngle = 240;
+            rightTempGauge.maxValue = 400f;
+            rightTempGauge.lerpRate = 2;
+            rightTempGauge.loop = false;
+            rightTempGauge.gizmoRadius = 0.022f;
+            rightTempGauge.gizmoHeight = 0.006f; ;
+            rightTempGauge.doCalibration = true;
+            rightTempGauge.calibrationSpeed = 1.5f;
+            rightTempGauge.heatEmitter = rightEmitter;
+            rightTempGauge.engineHealth = engineR.gameObject.GetComponent<Health>();
+
+
+            GameObject tempGaugeL = AircraftAPI.GetChildWithName(customAircraft, "EngineLTemp");
+
+            DashTempGauge leftTempGauge = tempGaugeL.AddComponent<DashTempGauge>();
+            HeatEmitter leftEmitter = engineL.gameObject.GetComponent<HeatEmitter>();
+            leftTempGauge.battery = battery;
+            leftTempGauge.dialHand = AircraftAPI.GetChildWithName(tempGaugeL, "needle1 (1)").transform;
+            leftTempGauge.axis = new Vector3(0, 1, 0);
+            leftTempGauge.arcAngle = 240;
+            leftTempGauge.maxValue = 400f;
+            leftTempGauge.lerpRate = 2;
+            leftTempGauge.loop = false;
+            leftTempGauge.gizmoRadius = 0.022f;
+            leftTempGauge.gizmoHeight = 0.006f; ;
+            leftTempGauge.doCalibration = true;
+            leftTempGauge.calibrationSpeed = 1.5f;
+            leftTempGauge.heatEmitter = leftEmitter;
+            leftTempGauge.engineHealth = engineL.gameObject.GetComponent<Health>();
+
+            GameObject tempGaugeAPU = AircraftAPI.GetChildWithName(customAircraft, "APUTemp");
+
+            DashAPUTemp apuGauge = tempGaugeAPU.AddComponent<DashAPUTemp>();
+            AuxilliaryPowerUnit apu = Fa26.gameObject.GetComponentInChildren<AuxilliaryPowerUnit>(true);
+            apuGauge.battery = battery;
+            apuGauge.dialHand = AircraftAPI.GetChildWithName(tempGaugeAPU, "needle1 (1)").transform;
+            apuGauge.axis = new Vector3(0, 1, 0);
+            apuGauge.arcAngle = 240;
+            apuGauge.maxValue = 1f;
+            apuGauge.lerpRate = 2;
+            apuGauge.loop = false;
+            apuGauge.gizmoRadius = 0.022f;
+            apuGauge.gizmoHeight = 0.006f; ;
+            apuGauge.doCalibration = true;
+            apuGauge.calibrationSpeed = 1.5f;
+            apuGauge.apu = apu;
+            apuGauge.apuHealth = apu.gameObject.GetComponent<Health>();
+
+
+            GameObject ogSphere = AircraftAPI.GetChildWithName(Fa26, "AttSphereParent");
+            GameObject backUpAttSphere = GameObject.Instantiate(ogSphere, ogSphere.transform.parent);
+            //GameObject backUpAttBracket = Instantiate(Functions.GetChildWithName(this.go, "AttitudeIndicator"));
+            //backUpAttBracket.transform.SetParent(backUpAttSphere.transform);
+
+            backUpAttSphere.transform.localPosition = new Vector3(-260.4f, -237.7f, 137.9f);
+            backUpAttSphere.transform.localEulerAngles = new Vector3(187.596f, 0, 180f);
+            backUpAttSphere.transform.localScale = new Vector3(63, 63, 63);
+
+
+
+            GameObject compass = AircraftAPI.GetChildWithName(customAircraft, "Heading_Meter");
+            DashCompass piss = compass.AddComponent<DashCompass>();
+            piss.axis = new Vector3(0, 0, -1);
+            piss.compassTransform = compass.transform;
+            piss.flightInfo = flightInfo;
+
+
+
+        }
+
+        public static void SetUpGaugeGlow()
+        {
+            EmissiveTextureLight emissLight = customAircraft.GetComponentInChildren<EmissiveTextureLight>(true);
+
+            AircraftAPI.FindInteractable("Instrument Lights").gameObject.GetComponent<VRLever>().OnSetState.AddListener(emissLight.SetStatus);
+        }
+
+        public static void SetUpIndexers()
+        {
+            GameObject cage = AircraftAPI.GetChildWithName(customAircraft, "Accel_&_Heading_Instruments");
+
+            GameObject refuelReady = AircraftAPI.GetChildWithName(cage, "ReadyTxt");
+            GameObject refuelLatched = AircraftAPI.GetChildWithName(cage, "LatchedText");
+            GameObject refuelDisc = AircraftAPI.GetChildWithName(cage, "DisconnectText");
+
+            VTText ready = refuelReady.GetComponentInChildren<VTText>();
+            VTText latch = refuelLatched.GetComponentInChildren<VTText>();
+            VTText disconnect = refuelDisc.GetComponentInChildren<VTText>();
+
+            GameObject aoaUp = AircraftAPI.GetChildWithName(cage, "AOAUp");
+            GameObject aoaCenter = AircraftAPI.GetChildWithName(cage, "AOACenter");
+            GameObject aoaDown = AircraftAPI.GetChildWithName(cage, "AOADown");
+
+            VTText up = aoaUp.GetComponentInChildren<VTText>();
+            VTText mid = aoaCenter.GetComponentInChildren<VTText>();
+            VTText down = aoaDown.GetComponentInChildren<VTText>();
+
+
+
+            RefuelIndexer refuelIndex = cage.AddComponent<RefuelIndexer>();
+            refuelIndex.ready = AircraftAPI.ReplaceVTText(refuelReady, ready);
+            refuelIndex.latched = AircraftAPI.ReplaceVTText(refuelLatched, latch);
+            refuelIndex.disconnected = AircraftAPI.ReplaceVTText(refuelDisc, disconnect);
+            refuelIndex.port = Fa26.GetComponentInChildren<RefuelPort>();
+            refuelIndex.battery = Fa26.GetComponentInChildren<Battery>();
+
+
+            AoAIndexer indexer = cage.AddComponent<AoAIndexer>();
+            indexer.aoaUpText = AircraftAPI.ReplaceVTText(aoaUp, up);
+            indexer.aoaDownText = AircraftAPI.ReplaceVTText(aoaDown, down);
+            indexer.aoaCenterText = AircraftAPI.ReplaceVTText(aoaCenter, mid);
+            indexer.battery = Fa26.GetComponentInChildren<Battery>();
+            indexer.flightInfo = Fa26.GetComponentInChildren<FlightInfo>();
+            indexer.gear = Fa26.GetComponentInChildren<GearAnimator>();
+
+        }
+
+        //Call this method after things like gauges and systems are set up
+        public static void SetUpKnobs()
+        {
+            VRTwistKnobInt fuelKnob = AircraftAPI.GetChildWithName(customAircraft, "FuelGaugeInteractable").GetComponent<VRTwistKnobInt>();
+
+            foreach(DashFuelNumGauge gauge in customAircraft.GetComponentsInChildren<DashFuelNumGauge>())
+            {
+                fuelKnob.OnSetState.AddListener(gauge.ChangeDisplayValue);
+            }
 
         }
 
@@ -346,5 +635,33 @@ namespace A10Mod
             wingLever.RemoteSetState(0);
 
         }
+
+        public static void SetUpFormationLights()
+        {
+            SwitchableMaterialEmission emission = customAircraft.GetComponentInChildren<SwitchableMaterialEmission>(true);
+            emission.battery = Fa26.GetComponentInChildren<Battery>(true);
+
+            VRTwistKnob formationKnob = AircraftAPI.FindInteractable(customAircraft, "Formation Lights").GetComponent<VRTwistKnob>();
+            formationKnob.OnSetState.AddListener(new UnityAction<float>((num) =>
+            {
+                if (num > 0)
+                {
+                    emission.SetEmission(true);
+                }
+                else
+                {
+                    emission.SetEmission(false);
+                }
+
+                emission.SetEmissionMultiplier(num);
+            }
+            ));
+
+        }
+        public static void ChangeRWRIcon()
+        {
+            Fa26.GetComponentInChildren<Radar>(true).radarSymbol = "custom";
+        }
+
     }
 }

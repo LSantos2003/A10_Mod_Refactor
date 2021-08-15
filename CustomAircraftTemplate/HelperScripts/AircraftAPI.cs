@@ -38,6 +38,20 @@ namespace A10Mod
             return null;
         }
 
+        public static VRInteractable FindInteractable(GameObject gameObject, string interactableName)
+        {
+            foreach (VRInteractable interactble in gameObject.GetComponentsInChildren<VRInteractable>(true))
+            {
+                if (interactble.interactableName == interactableName)
+                {
+                    return interactble;
+                }
+            }
+
+            Debug.LogError($"Could not find VRinteractable: {interactableName}");
+            return null;
+        }
+
         public static HardpointVehiclePart FindHardpoint(int idx)
         {
             foreach (HardpointVehiclePart vp in Main.playerGameObject.GetComponentsInChildren<HardpointVehiclePart>(true))
@@ -226,6 +240,25 @@ namespace A10Mod
             traverse.Field("vehicleList").SetValue(vehicleList);
 
 
+        }
+
+
+        public static VTText ReplaceVTText(GameObject gameobject, VTText text)
+        {
+            VTText newText = gameobject.AddComponent<VTText>();
+            newText.text = text.text;
+            newText.font = text.font;
+            newText.fontSize = text.fontSize;
+            newText.align = text.align;
+            newText.vertAlign = text.vertAlign;
+            newText.color = text.color;
+            newText.emission = text.emission;
+            newText.useEmission = text.useEmission;
+            newText.emissionMult = text.emissionMult;
+
+            UnityEngine.Object.Destroy(text);
+
+            return newText;
         }
 
 

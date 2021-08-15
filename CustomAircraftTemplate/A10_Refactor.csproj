@@ -56,6 +56,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\SteamLibrary\steamapps\common\VTOL VR\VTOLVR_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Dependencies\UnityEngine.dll</HintPath>
     </Reference>
@@ -96,10 +100,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AircraftSwitchSetup.cs" />
     <Compile Include="CustomClasses\FlapsAnimator.cs" />
     <Compile Include="CustomClasses\HPEquipRadarJammer.cs" />
     <Compile Include="CustomClasses\RadarJammer.cs" />
+    <Compile Include="Instruments\AoAIndexer.cs" />
+    <Compile Include="Instruments\DashAccelGauge.cs" />
     <Compile Include="Instruments\DashAOAGauge.cs" />
+    <Compile Include="Instruments\DashAPUTemp.cs" />
+    <Compile Include="Instruments\DashCompass.cs" />
+    <Compile Include="Instruments\DashEngineFlow.cs" />
+    <Compile Include="Instruments\DashFuelNumGauge.cs" />
+    <Compile Include="Instruments\DashFuelText.cs" />
+    <Compile Include="Instruments\DashTempGauge.cs" />
+    <Compile Include="Instruments\DashVertGauge.cs" />
+    <Compile Include="Instruments\RefuelIndexer.cs" />
     <Compile Include="Multiplayer\AiSetup.cs" />
     <Compile Include="HelperScripts\AircraftAPI.cs" />
     <Compile Include="AircraftInfo.cs" />

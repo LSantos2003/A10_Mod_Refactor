@@ -98,9 +98,19 @@ namespace A10Mod
                 AircraftSetup.SetUpMFD();
 
                 AircraftSetup.SetUpGauges();
+
+                AircraftSetup.SetUpGaugeGlow();
+
+                AircraftSetup.ChangeRWRIcon();
                 //AircraftAPI.FindInteractable("Toggle Altitude Mode").OnInteract.AddListener(logRCS);
 
 
+                //Sets up knob interactables in the a-10
+                //Make sure this is one of the last methods called in order for it
+                //to grab the right components
+                AircraftSetup.SetUpKnobs();
+
+                AircraftSetup.SetUpFormationLights();
 
                 FlightLogger.Log("Disabling mesh");
                 AircraftAPI.Disable26Mesh();
@@ -140,6 +150,19 @@ namespace A10Mod
 
                 //Folds the wings down on spawn. Runs a coroutine that waits one second to do so
                 AircraftSetup.SetWingFold();
+
+            }
+        }
+
+
+        public static void Postfix(WeaponManager __instance)
+        {
+            FlightLogger.Log("Start postfix ran in wm!");
+            if (__instance.gameObject.GetComponentInChildren<PlayerFlightLogger>() && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected)
+            {
+                AircraftSetup.SetUpIndexers();
+
+                AircraftSwitchSetup.SetUpBottomLeft();
 
             }
         }
