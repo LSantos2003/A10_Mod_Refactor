@@ -11,6 +11,11 @@ namespace A10Mod
     class AircraftSwitchSetup
     {
 
+
+        public static bool quickStart = false;
+        public static bool hotStart = false;
+
+
         public static void SetUpBottomLeft()
         {
             WeaponManager wm = AircraftSetup.Fa26.GetComponentInChildren<WeaponManager>(true);
@@ -60,7 +65,7 @@ namespace A10Mod
             }
             );
 
-            HPEquippable gunEquip = wm.GetEquip(0);
+            /*HPEquippable gunEquip = wm.GetEquip(0);
             VRLever gunArmLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Gun Arm").GetComponent<VRLever>();
             gunArmLever.OnSetState.AddListener(new UnityAction<int>((num) =>
             {
@@ -76,17 +81,180 @@ namespace A10Mod
 
 
             }
-        ));
+        ));*/
 
 
             VRLever hudToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "HUD Toggle").GetComponent<VRLever>();
             hudToggleLever.OnSetState.AddListener(AircraftAPI.GetChildWithName(AircraftSetup.Fa26, "HUDCanvas").GetComponent<ObjectPowerUnit>().SetConnection);
 
 
+        }
+
+
+        public static void SetUpEngineStart()
+        {
 
 
         }
 
+        public static void SetUpGenerators()
+        {
+
+            Battery battery = AircraftSetup.Fa26.GetComponentInChildren<Battery>(true);
+         
+            VRLever hudToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Battery").GetComponent<VRLever>();
+            hudToggleLever.OnSetState.AddListener(battery.SetConnection);
+
+            ModuleEngine engineL = null;
+            ModuleEngine engineR = null;
+            foreach (ModuleEngine engine in AircraftSetup.Fa26.GetComponentsInChildren<ModuleEngine>(true))
+            {
+                if (engine.name.ToLower().Contains("left"))
+                {
+                    engineL = engine;
+                }
+                else
+                {
+                    engineR = engine;
+                }
+
+            }
+
+            VRLever leftEngineLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Left Engine Start").GetComponent<VRLever>();
+            leftEngineLever.OnSetState.AddListener(engineL.SetPower);
+
+            VRLever rightEngineLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Right Engine Start").GetComponent<VRLever>();
+            rightEngineLever.OnSetState.AddListener(engineR.SetPower);
+
+
+            VRLever apuLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "APU Start").GetComponent<VRLever>();
+            apuLever.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<AuxilliaryPowerUnit>(true).SetPower);
+
+        }
+
+        public static void SetUpRightPanel()
+        {
+            DashRWR rwr = AircraftSetup.Fa26.GetComponentInChildren<DashRWR>(true);
+            MissileDetector mws = rwr.missileDetector;
+
+            VRLever mwsToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "MWS Switch").GetComponent<VRLever>();
+            mwsToggleLever.OnSetState.AddListener(new UnityAction<int>((num) =>
+            {
+                mws.enabled = num == 1 || num == 2;
+            }));
+
+
+            VRLever rwrSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "RWR Switch").GetComponent<VRLever>();
+            rwrSwitch.OnSetState.AddListener(new UnityAction<int>((num) =>
+            {
+                rwr.enabled = num != 0;
+                if (num == 0)
+                {
+                    rwr.SetMasterMode((int)DashRWR.RWRModes.Off);
+                    // Traverse.Create(rwr).Field("detectedPings").SetValue(new Dictionary<int, RWRIcon>());
+                }
+                else if (num == 1)
+                    rwr.SetMasterMode((int)DashRWR.RWRModes.Silent);
+                else
+                    rwr.SetMasterMode((int)DashRWR.RWRModes.On);
+            })); // you can tell where i took over this code  
+
+            VRLever cmsSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "CMS Dispenser").GetComponent<VRLever>();
+            cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<CMSConfigUI>(true).SetFlares);
+            cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<CMSConfigUI>(true).SetChaff);
+
+        }
+
+
+        public static void SetUpEmergency()
+        {
+            WeaponManager wm = AircraftSetup.Fa26.GetComponentInChildren<WeaponManager>(true);
+
+            VRInteractable jettisonButton = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Emergency Jettison");
+            jettisonButton.OnInteract.AddListener(new UnityAction(() =>
+            {
+
+                WeaponManagerUI ui = AircraftSetup.Fa26.GetComponentInChildren<WeaponManagerUI>(true);
+                ui.MarkAllJettison();
+
+                for (int i = 0; i < wm.equipCount; i++)
+                {
+                    if (wm.GetEquip(i) && wm.GetEquip(i).weaponType == HPEquippable.WeaponTypes.AAM)
+                    {
+                        wm.GetEquip(i).markedForJettison = false;
+                    }
+                }
+                ui.JettisonMarkedItems();
+            }
+            ));
+
+
+            AuxilliaryPowerUnit apu = AircraftSetup.Fa26.GetComponentInChildren<AuxilliaryPowerUnit>(true);
+            ModuleEngine engineL = null;
+            ModuleEngine engineR = null;
+            foreach (ModuleEngine engine in AircraftSetup.Fa26.GetComponentsInChildren<ModuleEngine>(true))
+            {
+                if (engine.name.ToLower().Contains("left"))
+                {
+                    engineL = engine;
+                }
+                else
+                {
+                    engineR = engine;
+                }
+
+            }
+
+            EjectHandle rightEject = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Right EXT").GetComponent<EjectHandle>();
+            rightEject.OnHandlePull.AddListener(new UnityAction(() => { ExtinguishFire(engineR); }));
+
+            EjectHandle leftEject = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Left EXT").GetComponent<EjectHandle>();
+            leftEject.OnHandlePull.AddListener(new UnityAction(() => { ExtinguishFire(engineL); }));
+
+            EjectHandle apuEject = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "APU Ext").GetComponent<EjectHandle>();
+            apuEject.OnHandlePull.AddListener(new UnityAction(() => { RepairAPU(apu); }));
+
+
+        }
+
+
+        private static void ExtinguishFire(ModuleEngine engine)
+        {
+
+
+            if (UnityEngine.Random.Range(1, 5) == 1)
+            {
+                foreach (var vp in engine.GetComponentsInChildren<VehiclePart>())
+                {
+                    vp.Repair();
+                }
+            }
+            else
+            {
+                // bool enginesFailed = engine.failed;
+                foreach (var vp in engine.GetComponentsInChildren<VehiclePart>())
+                {
+                    vp.Repair();
+                }
+                //if (enginesFailed)
+                //  engine.FailEngine(); // this will have the effect of getting rid of the fire but still failing the engine
+            }
+            FlightLogger.Log("Temperz has tried to repair the engine!"); // IM A FUNCTION MORTYYYYYYYYYYYYYY
+        }
+
+
+        private static void RepairAPU(AuxilliaryPowerUnit apu)
+        {
+            apu.RepairUnit();
+            if (UnityEngine.Random.Range(1, 5) == 1)
+            {
+                apu.RepairUnit();
+            }
+            FlightLogger.Log("Temperz has tried to repair the apu!");
+        }
+
+
+       
 
     }
 }

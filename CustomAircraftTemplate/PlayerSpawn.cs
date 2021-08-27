@@ -80,6 +80,15 @@ namespace A10Mod
                 //Changes characteristics of the engines
                 AircraftSetup.SetUpEngines();
 
+                //Reduces FA-26 mass
+                AircraftSetup.SetUpMass();
+
+                //Increases lift
+                AircraftSetup.SetUpFlightModel();
+
+                //Parents a10 wings to fa26's
+                //AircraftSetup.SetUpWingDamage();
+
                 //Changes depth and scale of the hud to make it legible
                 //AircraftSetup.SetUpHud();
 
@@ -102,6 +111,12 @@ namespace A10Mod
                 AircraftSetup.SetUpGaugeGlow();
 
                 AircraftSetup.ChangeRWRIcon();
+
+                AircraftSetup.SetUpFlares();
+
+                AircraftSetup.SetUpAutoCMS();
+
+                AircraftSetup.SetUpFrontCMSPanel();
                 //AircraftAPI.FindInteractable("Toggle Altitude Mode").OnInteract.AddListener(logRCS);
 
 
@@ -151,6 +166,12 @@ namespace A10Mod
                 //Folds the wings down on spawn. Runs a coroutine that waits one second to do so
                 AircraftSetup.SetWingFold();
 
+                AircraftSwitchSetup.SetUpBottomLeft();
+                AircraftSwitchSetup.SetUpEngineStart();
+                AircraftSwitchSetup.SetUpGenerators();
+                AircraftSwitchSetup.SetUpEmergency();
+                AircraftSwitchSetup.SetUpRightPanel();
+
             }
         }
 
@@ -162,7 +183,8 @@ namespace A10Mod
             {
                 AircraftSetup.SetUpIndexers();
 
-                AircraftSwitchSetup.SetUpBottomLeft();
+                //Auto selects the rwr page on the MMFD
+                AircraftSetup.SetUpRWR();
 
             }
         }

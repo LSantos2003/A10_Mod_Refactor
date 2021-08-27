@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
+using Harmony;
 
 namespace A10Mod
 {
@@ -483,12 +484,46 @@ namespace A10Mod
                 }
                 engine.autoAB = false;
                 engine.autoABThreshold = 1f;
-                engine.maxThrust = 100f;
+                engine.maxThrust = 50f;
+                engine.fuelDrain = 0.8f;
             }
 
             VRThrottle throttle = Fa26.GetComponentInChildren<VRThrottle>(true);
             throttle.abGate = false;
             throttle.abGateThreshold = 1.1f;
+
+        }
+
+        public static void SetUpMass()
+        {
+            MassUpdater faMass = Fa26.GetComponent<MassUpdater>();
+            faMass.baseMass = 10.5f;
+
+
+
+        }
+
+        public static void SetUpFlightModel()
+        {
+            SimpleDrag drag = Fa26.GetComponent<SimpleDrag>();
+            //drag.area = 0.25f;
+
+            //Changes flight characteristics
+            Wing wingLeft = AircraftAPI.GetChildWithName(Fa26, "wingLeftAero").GetComponent<Wing>();
+            Wing wingRight = AircraftAPI.GetChildWithName(Fa26, "wingRightAero").GetComponent<Wing>();
+
+            //wingLeft.liftCoefficient = 0.4f;
+            wingLeft.liftArea = 4;
+
+            wingRight.liftArea = 4;
+            //wingRight.liftCoefficient = 0.4f;
+
+            Wing flapLeft = AircraftAPI.GetChildWithName(Fa26, "flapLeftAero").GetComponent<Wing>();
+            flapLeft.liftArea = 2.4f;
+
+            Wing flapRight = AircraftAPI.GetChildWithName(Fa26, "flapRightAero").GetComponent<Wing>();
+            flapRight.liftArea = 2.4f;
+
 
         }
 
@@ -535,7 +570,48 @@ namespace A10Mod
             Fa26.GetComponentInChildren<TargetingMFDPage>(true).opticalTargeter = targeter;
         }
 
+        public static void SetUpWingDamage()
+        {
+            GameObject leftWing = AircraftAPI.GetChildWithName(customAircraft, "LeftOuterWing");
+            leftWing.transform.SetParent(AircraftAPI.GetChildWithName(Fa26, "wingLeftPart").transform, true);
 
+            GameObject rightWing = AircraftAPI.GetChildWithName(customAircraft, "RightOuterWing");
+            rightWing.transform.SetParent(AircraftAPI.GetChildWithName(Fa26, "wingRightPart").transform, true);
+        }
+
+        public static void SetUpFlares()
+        {
+            Fa26.GetComponentInChildren<FlareCountermeasure>(true).maxCount = 240;
+        }
+
+        public static void SetUpAutoCMS()
+        {
+            AutoCMS cms = Fa26.AddComponent<AutoCMS>();
+            cms.flares = Fa26.GetComponentInChildren<FlareCountermeasure>(true);
+            cms.chaff = Fa26.GetComponentInChildren<ChaffCountermeasure>(true);
+            cms.mws = Fa26.GetComponentInChildren<MissileDetector>(true);
+        }
+        
+        public static void SetUpFrontCMSPanel()
+        {
+            Battery battery = Fa26.GetComponentInChildren<Battery>(true);
+
+
+            GameObject bottomLeftText = AircraftAPI.GetChildWithName(customAircraft, "CMS_BOT_LEFT");
+            PanelMWS panelMws = bottomLeftText.AddComponent<PanelMWS>();
+            panelMws.text = bottomLeftText.GetComponent<TextMeshPro>();
+            panelMws.battery = battery;
+            panelMws.detector = Fa26.GetComponentInChildren<MissileDetector>(true);
+
+            GameObject topRightText = AircraftAPI.GetChildWithName(customAircraft, "CMS_TOP_RIGHT");
+            PanelCMS panelCms = topRightText.AddComponent<PanelCMS>();
+            panelCms.text = topRightText.GetComponent<TextMeshPro>();
+            panelCms.battery = battery;
+            panelCms.flares = Fa26.GetComponentInChildren<FlareCountermeasure>(true);
+            panelCms.chaff = Fa26.GetComponentInChildren<ChaffCountermeasure>(true);
+
+        }
+        
         public static void SetUpMissileLaunchers()
         {
             InternalWeaponBay[] bays = customAircraft.GetComponentsInChildren<InternalWeaponBay>(true);
@@ -658,6 +734,44 @@ namespace A10Mod
             ));
 
         }
+
+        public static void SetUpRWR()
+        {
+            Main.instance.StartCoroutine(RWRRoutine());
+        }
+
+
+        public static IEnumerator RWRRoutine()
+        {
+            yield return new WaitForSeconds(1);
+            DashRWR rwr = AircraftSetup.Fa26.GetComponentInChildren<DashRWR>(true);
+
+            foreach (var mfd in Fa26.GetComponentsInChildren<MFD>(true))
+            {
+                if (mfd.name == "MiniMFDLeft")
+                {
+                    Debug.Log("1");
+                    mfd.SetPage("rwr");
+                    if (!mfd.powerOn)
+                    {
+                        Debug.Log("2");
+                        mfd.TogglePower();
+                        Debug.Log("3");
+                    }
+
+
+                    rwr.SetMasterMode((int)DashRWR.RWRModes.Off);
+
+                    Traverse.Create(mfd).Field("homePage").SetValue(mfd.manager.GetPage("rwr"));
+                    //UnityEngine.Object.Destroy(AircraftAPI.GetChildWithName(AircraftAPI.GetChildWithName(mfd.manager.transform.parent.gameObject, "BG"), "RWRText")); // Text gets in the way
+
+
+                    break;
+                }
+            }
+
+        }
+
         public static void ChangeRWRIcon()
         {
             Fa26.GetComponentInChildren<Radar>(true).radarSymbol = "custom";
