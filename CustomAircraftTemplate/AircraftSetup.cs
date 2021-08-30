@@ -109,6 +109,51 @@ namespace A10Mod
 
         }
 
+        public static void SetUpGun()
+        {
+            WeaponManager wm = Fa26.GetComponentInChildren<WeaponManager>(true);
+            HPEquippable gunEquip = wm.GetEquip(0);
+
+            gunEquip = wm.GetEquip(0);
+            if (gunEquip.gameObject.GetComponent<Gun>() != null)
+            {
+                Gun gun = gunEquip.gameObject.GetComponent<Gun>();
+                gun.maxAmmo = 1300;
+                gun.rpm = 3900;
+                gun.gunMass = 0.281f;
+                gun.currentAmmo = 1300;
+                gun.recoilFactor = 5f;
+                //gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
+
+                gun.bulletInfo.speed = 1010;
+                gun.bulletInfo.speed = 1010;
+                gun.bulletInfo.tracerWidth = 0.12f;
+                gun.bulletInfo.dispersion = 0.5f;
+                gun.bulletInfo.damage = 30f;
+                gun.bulletInfo.detonationRange = 8;
+                gun.bulletInfo.lifetimeVariance = 0;
+                gun.bulletInfo.projectileMass = 0.000365f;
+                gun.bulletInfo.totalMass = 0.000727f;
+
+                GunBarrelRotator rotator = gun.gameObject.AddComponent<GunBarrelRotator>();
+                rotator.rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
+                rotator.axis = new Vector3(1, 0, 0);
+                rotator.gun = gun;
+                rotator.speed = 1525f;
+                rotator.windDownRate = 2;
+                rotator.windupRate = 10;
+                rotator.minFiringSpeed = 1200;
+
+                gun.barrelRotator = rotator;
+
+
+                AircraftAPI.DisableMesh(gun.gameObject);
+
+                gunEquip.armable = true;
+                gunEquip.armed = true;
+            }
+        }
+
         public static void SetUpGauges()
         {
 
@@ -590,6 +635,17 @@ namespace A10Mod
             cms.flares = Fa26.GetComponentInChildren<FlareCountermeasure>(true);
             cms.chaff = Fa26.GetComponentInChildren<ChaffCountermeasure>(true);
             cms.mws = Fa26.GetComponentInChildren<MissileDetector>(true);
+            cms.manager = Fa26.GetComponentInChildren<CountermeasureManager>(true);
+            cms.rwr = Fa26.GetComponentInChildren<ModuleRWR>(true);
+
+            VRThrottle throttle = Fa26.GetComponentInChildren<VRThrottle>();
+            throttle.OnMenuButtonDown = new UnityEvent();
+            throttle.OnMenuButtonUp = new UnityEvent();
+
+            throttle.OnMenuButtonDown.AddListener(cms.StartCMS);
+            throttle.OnMenuButtonUp.AddListener(cms.StopCMS);
+
+
         }
         
         public static void SetUpFrontCMSPanel()
@@ -609,6 +665,40 @@ namespace A10Mod
             panelCms.battery = battery;
             panelCms.flares = Fa26.GetComponentInChildren<FlareCountermeasure>(true);
             panelCms.chaff = Fa26.GetComponentInChildren<ChaffCountermeasure>(true);
+            panelCms.autoCms = Fa26.GetComponentInChildren<AutoCMS>(true);
+
+        }
+
+        public static void SetUpSideCMSPanel()
+        {
+            Battery battery = Fa26.GetComponentInChildren<Battery>(true);
+
+            GameObject cm1 = AircraftAPI.GetChildWithName(customAircraft, "CMSP1");
+            PanelCMSP1 cmsp1 = cm1.AddComponent<PanelCMSP1>();
+            cmsp1.text = cmsp1.GetComponent<TextMeshPro>();
+            cmsp1.battery = battery;
+            cmsp1.chaff = Fa26.GetComponentInChildren<ChaffCountermeasure>(true);
+            cmsp1.autoCms = Fa26.GetComponentInChildren<AutoCMS>(true);
+
+            GameObject cm2 = AircraftAPI.GetChildWithName(customAircraft, "CMSP2");
+            PanelCMSP2 cmsp2 = cm2.AddComponent<PanelCMSP2>();
+            cmsp2.text = cmsp2.GetComponent<TextMeshPro>();
+            cmsp2.battery = battery;
+            cmsp2.flares = Fa26.GetComponentInChildren<FlareCountermeasure>(true);
+            cmsp2.autoCms = Fa26.GetComponentInChildren<AutoCMS>(true);
+
+            GameObject cm3 = AircraftAPI.GetChildWithName(customAircraft, "CMSP3");
+            PanelCMSP3 cmsp3 = cm3.AddComponent<PanelCMSP3>();
+            cmsp3.text = cmsp3.GetComponent<TextMeshPro>();
+            cmsp3.battery = battery;
+            cmsp3.autoCms = Fa26.GetComponentInChildren<AutoCMS>(true);
+
+            GameObject cm4 = AircraftAPI.GetChildWithName(customAircraft, "CMSP4");
+            PanelCMSP4 cmsp4 = cm4.AddComponent<PanelCMSP4>();
+            cmsp4.text = cmsp4.GetComponent<TextMeshPro>();
+            cmsp4.battery = battery;
+            cmsp4.autoCms = Fa26.GetComponentInChildren<AutoCMS>(true);
+
 
         }
         
@@ -737,7 +827,7 @@ namespace A10Mod
 
         public static void SetUpRWR()
         {
-            Main.instance.StartCoroutine(RWRRoutine());
+            //Main.instance.StartCoroutine(RWRRoutine());
         }
 
 
@@ -759,8 +849,6 @@ namespace A10Mod
                         Debug.Log("3");
                     }
 
-
-                    rwr.SetMasterMode((int)DashRWR.RWRModes.Off);
 
                     Traverse.Create(mfd).Field("homePage").SetValue(mfd.manager.GetPage("rwr"));
                     //UnityEngine.Object.Destroy(AircraftAPI.GetChildWithName(AircraftAPI.GetChildWithName(mfd.manager.transform.parent.gameObject, "BG"), "RWRText")); // Text gets in the way

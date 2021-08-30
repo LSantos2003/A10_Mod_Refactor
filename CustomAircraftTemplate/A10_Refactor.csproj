@@ -105,6 +105,10 @@
     <Compile Include="CustomClasses\FlapsAnimator.cs" />
     <Compile Include="CustomClasses\HPEquipRadarJammer.cs" />
     <Compile Include="CustomClasses\PanelCMS.cs" />
+    <Compile Include="CustomClasses\PanelCMSP4.cs" />
+    <Compile Include="CustomClasses\PanelCMSP3.cs" />
+    <Compile Include="CustomClasses\PanelCMSP2.cs" />
+    <Compile Include="CustomClasses\PanelCMSP1.cs" />
     <Compile Include="CustomClasses\PanelMWS.cs" />
     <Compile Include="CustomClasses\PanelText.cs" />
     <Compile Include="CustomClasses\RadarJammer.cs" />

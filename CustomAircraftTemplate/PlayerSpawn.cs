@@ -117,6 +117,10 @@ namespace A10Mod
                 AircraftSetup.SetUpAutoCMS();
 
                 AircraftSetup.SetUpFrontCMSPanel();
+
+                AircraftSetup.SetUpSideCMSPanel();
+
+
                 //AircraftAPI.FindInteractable("Toggle Altitude Mode").OnInteract.AddListener(logRCS);
 
 
@@ -185,6 +189,8 @@ namespace A10Mod
 
                 //Auto selects the rwr page on the MMFD
                 AircraftSetup.SetUpRWR();
+
+                AircraftSetup.SetUpGun();
 
             }
         }
