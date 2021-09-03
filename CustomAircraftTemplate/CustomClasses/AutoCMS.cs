@@ -182,20 +182,8 @@ namespace A10Mod
 
         public void StartCMS()
         {
-            switch (this.cmsMode)
-            {
-                case Mode.MANUAL:
-                    this.active = true;
-                    break;
-                case Mode.SEMI:
-                    this.active = true;
-                    break;
-                case Mode.AUTO:
-                    this.active = true;
-                    break;
 
-
-            }
+            this.active = true;
                 
         }
 
@@ -203,17 +191,12 @@ namespace A10Mod
         {
             switch (this.cmsMode)
             {
-                case Mode.MANUAL:
-                    this.active = false;
-                    break;
-                case Mode.SEMI:
-                    this.active = false;
-                    break;
                 case Mode.AUTO:
                     this.active = true;
                     break;
-       
-
+                default:
+                    this.active = false;
+                    break;
 
             }
 
