@@ -539,6 +539,13 @@ namespace A10Mod
 
         }
 
+        public static void SetUpClock()
+        {
+            GameObject clock = AircraftAPI.GetChildWithName(customAircraft, "ClockGauge");
+            DashClock dashClock = clock.AddComponent<DashClock>();
+            dashClock.text = clock.GetComponentInChildren<TextMeshPro>(true);
+        }
+
         public static void SetUpMass()
         {
             MassUpdater faMass = Fa26.GetComponent<MassUpdater>();
@@ -666,7 +673,12 @@ namespace A10Mod
             panelCms.flares = Fa26.GetComponentInChildren<FlareCountermeasure>(true);
             panelCms.chaff = Fa26.GetComponentInChildren<ChaffCountermeasure>(true);
             panelCms.autoCms = Fa26.GetComponentInChildren<AutoCMS>(true);
-
+            
+            GameObject bottomRightText = AircraftAPI.GetChildWithName(customAircraft, "CMS_BOT_RIGHT");
+            PanelLock panelLock = bottomRightText.AddComponent<PanelLock>();
+            panelLock.text = bottomRightText.GetComponent<TextMeshPro>();
+            panelLock.battery = battery;
+            panelLock.rwr = Fa26.GetComponentInChildren<ModuleRWR>(true);
         }
 
         public static void SetUpSideCMSPanel()

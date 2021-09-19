@@ -31,16 +31,9 @@ namespace A10Mod
         public static IEnumerator DetachRoutine(LoadoutConfigurator config)
         {
             yield return new WaitForSeconds(1);
-
+            config.DetachImmediate(14);
             Debug.Log("Hardpoint count: " + config.wm.hardpointTransforms.Length);
-            for (int i = 0; i < config.wm.hardpointTransforms.Length; i++)
-            {
-                if(i == 11 || i == 12 || i == 14)
-                {
-                    continue;
-                }
-                config.DetachImmediate(i);
-            }
+            
         }
 
     }

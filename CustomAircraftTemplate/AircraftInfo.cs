@@ -26,7 +26,7 @@ namespace A10Mod
         public const string PreviewPngFileName = "A10_Preview.png";
         public const string AircraftAssetbundleName = "a10c";
         public const string UnityMoverFileName = "warthogPositions.surg";
-        public const string AIUnityMoverFileName = "NighthawkPositionsAI.surg";
+        public const string AIUnityMoverFileName = "warthogPositionsAI.surg";
 
         //Name of the prefab of your aircraft from the assetbundle
         public const string AircraftPrefabName = "A10_V3.prefab";

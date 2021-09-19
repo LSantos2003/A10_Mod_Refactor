@@ -108,6 +108,8 @@ namespace A10Mod
 
                 AircraftSetup.SetUpGauges();
 
+                AircraftSetup.SetUpClock();
+
                 AircraftSetup.SetUpGaugeGlow();
 
                 AircraftSetup.ChangeRWRIcon();

@@ -16,6 +16,7 @@ namespace A10Mod
 
 		public static void CreateAi(GameObject aiObject)
         {
+
 			UnityMover mover = aiObject.gameObject.AddComponent<UnityMover>();
 			mover.gs = aiObject.gameObject;
 			mover.FileName = AircraftInfo.AIUnityMoverFileName;
@@ -50,8 +51,38 @@ namespace A10Mod
 			AircraftAPI.DisableMesh(go, componentInChildren);
 			
 		}
+		public static void SetUpEngines(GameObject aiAircraft, GameObject customAircraft)
+		{
+			foreach (ModuleEngine engine in aiAircraft.GetComponentsInChildren<ModuleEngine>(true))
+			{
+				if (engine.name.ToLower().Contains("left"))
+				{
+					foreach (EngineRotator rotator in customAircraft.GetComponentsInChildren<EngineRotator>(true))
+					{
+						if (rotator.name.ToLower().Contains("left"))
+						{
+							rotator.engine = engine;
+						}
+					}
+				}
+				else
+				{
+					foreach (EngineRotator rotator in customAircraft.GetComponentsInChildren<EngineRotator>(true))
+					{
+						if (rotator.name.ToLower().Contains("right"))
+						{
+							rotator.engine = engine;
+						}
+					}
+				}
+				engine.autoAB = false;
+				engine.autoABThreshold = 1f;
+				engine.maxThrust = 50f;
+				engine.fuelDrain = 0.8f;
+			}
+		}
 
-		public static void CreateControlSurfaces(GameObject aiAircraft, GameObject customAircraft)
+			public static void CreateControlSurfaces(GameObject aiAircraft, GameObject customAircraft)
 		{
 
 			AeroController controller = aiAircraft.GetComponentInChildren<AeroController>();
