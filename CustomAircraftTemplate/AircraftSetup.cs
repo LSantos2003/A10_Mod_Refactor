@@ -111,46 +111,23 @@ namespace A10Mod
 
         public static void SetUpGun()
         {
-            WeaponManager wm = Fa26.GetComponentInChildren<WeaponManager>(true);
-            HPEquippable gunEquip = wm.GetEquip(0);
+            WeaponManager wm = Fa26.GetComponentInChildren<WeaponManager>(true);;
 
-            gunEquip = wm.GetEquip(0);
-            if (gunEquip.gameObject.GetComponent<Gun>() != null)
+            //HPEquipGun gunEquip = Fa26.GetComponentInChildren<HPEquipGun>(true);
+            Gun gun = Fa26.GetComponentInChildren<Gun>(true);
+            if (gun != null)
             {
-                Gun gun = gunEquip.gameObject.GetComponent<Gun>();
+              
                 gun.maxAmmo = 1300;
-                gun.rpm = 3900;
-                gun.gunMass = 0.281f;
                 gun.currentAmmo = 1300;
                 gun.recoilFactor = 5f;
-                //gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
-
-                gun.bulletInfo.speed = 1010;
-                gun.bulletInfo.speed = 1010;
-                gun.bulletInfo.tracerWidth = 0.12f;
-                gun.bulletInfo.dispersion = 0.5f;
-                gun.bulletInfo.damage = 30f;
-                gun.bulletInfo.detonationRange = 8;
-                gun.bulletInfo.lifetimeVariance = 0;
-                gun.bulletInfo.projectileMass = 0.000365f;
-                gun.bulletInfo.totalMass = 0.000727f;
-
-                GunBarrelRotator rotator = gun.gameObject.AddComponent<GunBarrelRotator>();
-                rotator.rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
-                rotator.axis = new Vector3(1, 0, 0);
-                rotator.gun = gun;
-                rotator.speed = 1525f;
-                rotator.windDownRate = 2;
-                rotator.windupRate = 10;
-                rotator.minFiringSpeed = 1200;
-
-                gun.barrelRotator = rotator;
-
-
+                Traverse gunTraverse = Traverse.Create(gun);
+                gunTraverse.Field("hasEjectTf").SetValue(false);
+                gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
                 AircraftAPI.DisableMesh(gun.gameObject);
 
-                gunEquip.armable = true;
-                gunEquip.armed = true;
+                //gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
+
             }
         }
 
@@ -673,7 +650,15 @@ namespace A10Mod
             panelCms.flares = Fa26.GetComponentInChildren<FlareCountermeasure>(true);
             panelCms.chaff = Fa26.GetComponentInChildren<ChaffCountermeasure>(true);
             panelCms.autoCms = Fa26.GetComponentInChildren<AutoCMS>(true);
-            
+
+
+            /*GameObject topLeftText = AircraftAPI.GetChildWithName(customAircraft, "CMSC_TOP_LEFT");
+            PanelText panelJmr = topLeftText.AddComponent<PanelText>();
+            panelJmr.text = topLeftText.GetComponent<TextMeshPro>();
+            panelJmr.battery = battery;
+            panelJmr.SetText("OFF");
+            */
+
             GameObject bottomRightText = AircraftAPI.GetChildWithName(customAircraft, "CMS_BOT_RIGHT");
             PanelLock panelLock = bottomRightText.AddComponent<PanelLock>();
             panelLock.text = bottomRightText.GetComponent<TextMeshPro>();

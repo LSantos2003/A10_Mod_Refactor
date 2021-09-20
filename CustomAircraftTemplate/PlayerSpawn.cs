@@ -133,6 +133,8 @@ namespace A10Mod
 
                 AircraftSetup.SetUpFormationLights();
 
+            
+
                 FlightLogger.Log("Disabling mesh");
                 AircraftAPI.Disable26Mesh();
                
@@ -171,12 +173,14 @@ namespace A10Mod
 
                 //Folds the wings down on spawn. Runs a coroutine that waits one second to do so
                 AircraftSetup.SetWingFold();
+                AircraftSetup.SetUpGun();
 
                 AircraftSwitchSetup.SetUpBottomLeft();
                 AircraftSwitchSetup.SetUpEngineStart();
                 AircraftSwitchSetup.SetUpGenerators();
                 AircraftSwitchSetup.SetUpEmergency();
                 AircraftSwitchSetup.SetUpRightPanel();
+               
 
             }
         }
@@ -192,7 +196,7 @@ namespace A10Mod
                 //Auto selects the rwr page on the MMFD
                 AircraftSetup.SetUpRWR();
 
-                AircraftSetup.SetUpGun();
+                //AircraftSetup.SetUpGun();
 
             }
         }

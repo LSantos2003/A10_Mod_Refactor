@@ -16,6 +16,8 @@ namespace A10Mod
 
 		public static void CreateAi(GameObject aiObject)
         {
+			return;
+
 
 			UnityMover mover = aiObject.gameObject.AddComponent<UnityMover>();
 			mover.gs = aiObject.gameObject;

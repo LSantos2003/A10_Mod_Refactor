@@ -89,12 +89,16 @@ namespace A10Mod
             VRLever hudToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "HUD Toggle").GetComponent<VRLever>();
             hudToggleLever.OnSetState.AddListener(AircraftAPI.GetChildWithName(AircraftSetup.Fa26, "HUDCanvas").GetComponent<ObjectPowerUnit>().SetConnection);
 
+            VRLever hmcsToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "HMCS Toggle").GetComponent<VRLever>();
+            hmcsToggleLever.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<HelmetController>(true).SetPower);
+
+
             VTOLQuickStart quickStart = AircraftSetup.Fa26.GetComponentInChildren<VTOLQuickStart>(true);
 
             quickStart.quickStartComponents.OnApplySettings.AddListener(new UnityAction(() =>
             {
                 hudToggleLever.RemoteSetState(1);
-
+                hmcsToggleLever.RemoteSetState(1);
             }
             ));
         }
@@ -211,6 +215,7 @@ namespace A10Mod
             cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP2>(true).SetPage);
             cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP3>(true).SetPage);
             cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP4>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<AutoCMS>(true).SetCMSEnabled);
 
             VRInteractable set1 = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "SET CHAFF");
             set1.OnInteract.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP1>(true).IncrementChaffQuantity);

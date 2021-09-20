@@ -19,6 +19,7 @@ namespace A10Mod
         public UnityEvent OnModeSwitch = new UnityEvent();
 
         private bool active = true;
+        private bool cmsEnabled = false;
         private float cmsTimer = 0;
         private float autoReleaseTime = 0.5f;
 
@@ -28,6 +29,10 @@ namespace A10Mod
         private string CurrentProgram = "C";
         private void Update()
         {
+            if (!this.cmsEnabled) return;
+
+
+
             if (this.active)
             {
                 this.cmsTimer += Time.deltaTime;
@@ -97,6 +102,11 @@ namespace A10Mod
                 }
             }
 
+        }
+
+        public void SetCMSEnabled(int st)
+        {
+            this.cmsEnabled = st > 0;
         }
 
         public Mode GetCurrentMode()

@@ -13,15 +13,18 @@ namespace A10Mod
     [HarmonyPatch(typeof(LoadoutConfigurator), "Initialize")]
     public static class LoadoutConfigStartPatch
     {
-
-
+       
         public static void Postfix(LoadoutConfigurator __instance)
         {
 
             if (!AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B) return;
 
+            GAUSetUp.AddGau(__instance);
+            __instance.lockedHardpoints.Add(0);
+            GAUSetUp.SetUpGun(0);
+           
             //Detaches the weapons from the aircraft
-            //Main.instance.StartCoroutine(DetachRoutine(__instance));
+            Main.instance.StartCoroutine(DetachRoutine(__instance));
 
 
 
@@ -31,13 +34,14 @@ namespace A10Mod
         public static IEnumerator DetachRoutine(LoadoutConfigurator config)
         {
             yield return new WaitForSeconds(1);
+            GAUSetUp.SetUpGun(0);
             config.DetachImmediate(14);
             Debug.Log("Hardpoint count: " + config.wm.hardpointTransforms.Length);
             
         }
 
     }
-        [HarmonyPatch(typeof(LoadoutConfigurator), "EquipCompatibilityMask")]
+    [HarmonyPatch(typeof(LoadoutConfigurator), "EquipCompatibilityMask")]
     public static class EquipComaptibilityPatch
     {
         public static bool Prefix(LoadoutConfigurator __instance, HPEquippable equip)
