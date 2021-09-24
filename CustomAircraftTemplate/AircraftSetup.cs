@@ -120,7 +120,7 @@ namespace A10Mod
               
                 gun.maxAmmo = 1300;
                 gun.currentAmmo = 1300;
-                gun.recoilFactor = 5f;
+                gun.recoilFactor = 2.5f;
                 Traverse gunTraverse = Traverse.Create(gun);
                 gunTraverse.Field("hasEjectTf").SetValue(false);
                 gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
@@ -577,9 +577,13 @@ namespace A10Mod
         }
         public static void SetUpHud()
         {
-            CollimatedHUDUI hud = Fa26.GetComponentInChildren<CollimatedHUDUI>(true);
-            hud.depth = 1000f;
-            hud.UIscale = 1.5f;
+            Image hudMask = AircraftAPI.GetChildWithName(Fa26, "GlassMask").GetComponentInChildren<Image>(true);
+            hudMask.sprite = Main.hudMaskSprite;
+            AircraftAPI.GetChildWithName(Fa26, "GlassMask (1)").GetComponentInChildren<Image>(true).sprite = Main.hudMaskSprite;
+
+             CollimatedHUDUI hud = Fa26.GetComponentInChildren<CollimatedHUDUI>(true);
+             //hud.depth = 1000f;
+             hud.UIscale = 1.11f;
         }
 
         public static void SetUpEjectionSeat()
@@ -652,12 +656,10 @@ namespace A10Mod
             panelCms.autoCms = Fa26.GetComponentInChildren<AutoCMS>(true);
 
 
-            /*GameObject topLeftText = AircraftAPI.GetChildWithName(customAircraft, "CMSC_TOP_LEFT");
-            PanelText panelJmr = topLeftText.AddComponent<PanelText>();
+            GameObject topLeftText = AircraftAPI.GetChildWithName(customAircraft, "CMSC_TOP_LEFT");
+            PanelJMR panelJmr = topLeftText.AddComponent<PanelJMR>();
             panelJmr.text = topLeftText.GetComponent<TextMeshPro>();
             panelJmr.battery = battery;
-            panelJmr.SetText("OFF");
-            */
 
             GameObject bottomRightText = AircraftAPI.GetChildWithName(customAircraft, "CMS_BOT_RIGHT");
             PanelLock panelLock = bottomRightText.AddComponent<PanelLock>();

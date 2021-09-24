@@ -90,7 +90,7 @@ namespace A10Mod
                 //AircraftSetup.SetUpWingDamage();
 
                 //Changes depth and scale of the hud to make it legible
-                //AircraftSetup.SetUpHud();
+                AircraftSetup.SetUpHud();
 
                 //AircraftSetup.SetUpMissileLaunchers();
 

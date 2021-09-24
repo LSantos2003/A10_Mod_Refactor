@@ -46,7 +46,7 @@
     </Reference>
     <Reference Include="Multiplayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Vidjagames\Steam\steamapps\common\VTOL VR\VTOLVR_ModLoader\mods\Multiplayer\Multiplayer.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\VTOL VR\VTOLVR_ModLoader\mods\Multiplayer\Multiplayer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

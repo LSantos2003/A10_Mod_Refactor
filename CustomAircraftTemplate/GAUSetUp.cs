@@ -96,7 +96,7 @@ namespace A10Mod
 
                 gun.maxAmmo = 1300;
                 gun.currentAmmo = 1300;
-                gun.recoilFactor = 5f;
+                gun.recoilFactor = 2.5f;
                 Traverse gunTraverse = Traverse.Create(gun);
                 gunTraverse.Field("hasEjectTf").SetValue(false);
                 gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(AircraftSetup.customAircraft, "BarrelTf").transform;

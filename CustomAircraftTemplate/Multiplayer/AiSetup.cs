@@ -16,13 +16,12 @@ namespace A10Mod
 
 		public static void CreateAi(GameObject aiObject)
         {
-			return;
 
 
 			UnityMover mover = aiObject.gameObject.AddComponent<UnityMover>();
 			mover.gs = aiObject.gameObject;
 			mover.FileName = AircraftInfo.AIUnityMoverFileName;
-			//mover.load(false);
+			mover.load(false);
 
 			Disable26MeshAi(aiObject);
 
@@ -43,9 +42,53 @@ namespace A10Mod
 
 			SetUpRefuelPort(aiObject, aircraft);
 
-
+			SetUpEngines(aiObject, aircraft);
+			SetUpWheels(aiObject, aircraft);
 			SetUpRadarIcon(aiObject);
+			//DisableGun(aiObject);
 		}
+
+		public static void DisableGun(GameObject aiAircraft)
+        {
+
+			Gun gun = aiAircraft.GetComponentInChildren<Gun>(true);
+			AircraftAPI.DisableMesh(gun.gameObject);
+		}
+
+
+		public static void SetUpWheels(GameObject aiAircraft, GameObject customAircraft)
+		{
+			WheelsController wheelController = aiAircraft.GetComponent<WheelsController>();
+			CopyRotation copyRot = AircraftAPI.GetChildWithName(customAircraft, "FrontWheelPivot").GetComponentInChildren<CopyRotation>(true);
+			copyRot.target = wheelController.steeringTransform;
+
+			SuspensionWheelAnimator frontSus = AircraftAPI.GetChildWithName(aiAircraft, "FrontGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
+			SuspensionWheelAnimator leftSus = AircraftAPI.GetChildWithName(aiAircraft, "LeftGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
+			SuspensionWheelAnimator rightSus = AircraftAPI.GetChildWithName(aiAircraft, "RightGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
+
+			SuspensionWheelAnimator frontSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "FrontWheelPivot").GetComponentInChildren<SuspensionWheelAnimator>(true);
+			SuspensionWheelAnimator leftSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "GearLeft").GetComponentInChildren<SuspensionWheelAnimator>(true);
+			SuspensionWheelAnimator rightSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "GearRight").GetComponentInChildren<SuspensionWheelAnimator>(true);
+
+			frontSusCustomAircraft.suspension = frontSus.suspension;
+			leftSusCustomAircraft.suspension = leftSus.suspension;
+			rightSusCustomAircraft.suspension = rightSus.suspension;
+
+		}
+
+
+		public static void SetUpEngines(GameObject aiAircraft, GameObject customAircraft)
+        {
+			foreach(EngineRotator r in customAircraft.GetComponentsInChildren<EngineRotator>())
+            {
+				r.engine = aiAircraft.GetComponentInChildren<ModuleEngine>(true);
+            }
+
+			foreach(ModuleEngine e in aiAircraft.GetComponentsInChildren<ModuleEngine>(true))
+			{
+				e.autoAB = false;
+            }
+        }
 
 		public static void Disable26MeshAi(GameObject go)
 		{
@@ -53,37 +96,7 @@ namespace A10Mod
 			AircraftAPI.DisableMesh(go, componentInChildren);
 			
 		}
-		public static void SetUpEngines(GameObject aiAircraft, GameObject customAircraft)
-		{
-			foreach (ModuleEngine engine in aiAircraft.GetComponentsInChildren<ModuleEngine>(true))
-			{
-				if (engine.name.ToLower().Contains("left"))
-				{
-					foreach (EngineRotator rotator in customAircraft.GetComponentsInChildren<EngineRotator>(true))
-					{
-						if (rotator.name.ToLower().Contains("left"))
-						{
-							rotator.engine = engine;
-						}
-					}
-				}
-				else
-				{
-					foreach (EngineRotator rotator in customAircraft.GetComponentsInChildren<EngineRotator>(true))
-					{
-						if (rotator.name.ToLower().Contains("right"))
-						{
-							rotator.engine = engine;
-						}
-					}
-				}
-				engine.autoAB = false;
-				engine.autoABThreshold = 1f;
-				engine.maxThrust = 50f;
-				engine.fuelDrain = 0.8f;
-			}
-		}
-
+		
 			public static void CreateControlSurfaces(GameObject aiAircraft, GameObject customAircraft)
 		{
 

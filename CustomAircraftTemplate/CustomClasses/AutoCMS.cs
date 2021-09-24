@@ -27,6 +27,15 @@ namespace A10Mod
         private RelaseMode FlareRelaseMode = RelaseMode.Single;
         private Mode cmsMode = Mode.AUTO;
         private string CurrentProgram = "C";
+
+        private void Start()
+        {
+            for(int i = 0; i < 8; i++)
+            {
+                manager.DecreaseReleaseRate();
+            }
+
+        }
         private void Update()
         {
             if (!this.cmsEnabled) return;
@@ -66,11 +75,12 @@ namespace A10Mod
                     {
                         case RelaseMode.Double:
                             manager.releaseMode = CountermeasureManager.ReleaseModes.Double;
-                            this.chaff.FireCM();
+                            this.FireChaff();
+
                             break;
                         case RelaseMode.Single:
                             manager.releaseMode = CountermeasureManager.ReleaseModes.Single_Auto;
-                            this.chaff.FireCM();
+                            this.FireChaff();
                             break;
                         case RelaseMode.None:
                             break;
@@ -80,11 +90,11 @@ namespace A10Mod
                     {
                         case RelaseMode.Double:
                             manager.releaseMode = CountermeasureManager.ReleaseModes.Double;
-                            this.flares.FireCM();
+                            this.FireFlares();
                             break;
                         case RelaseMode.Single:
                             manager.releaseMode = CountermeasureManager.ReleaseModes.Single_Auto;
-                            this.flares.FireCM();
+                            this.FireFlares();
                             break;
                         case RelaseMode.None:
                             break;
@@ -104,6 +114,21 @@ namespace A10Mod
 
         }
 
+        private void FireChaff()
+        {
+            manager.SetChaff(1);
+            manager.SetFlare(0);
+            manager.FireCM();
+            manager.StopFireCM();
+        }
+
+        private void FireFlares()
+        {
+            manager.SetChaff(0);
+            manager.SetFlare(1);
+            manager.FireCM();
+            manager.StopFireCM();
+        }
         public void SetCMSEnabled(int st)
         {
             this.cmsEnabled = st > 0;

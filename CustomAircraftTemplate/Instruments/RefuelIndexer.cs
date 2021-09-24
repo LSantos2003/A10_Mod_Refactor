@@ -37,9 +37,9 @@ namespace A10Mod
 
         private void Awake()
         {
-            port = FlightSceneManager.instance.playerActor.gameObject.GetComponentInChildren<RefuelPort>();
-            refueler = port.currentRefuelPlane;
-            RefuelPlaneTraverse = Traverse.Create(refueler);
+            //port = FlightSceneManager.instance.playerActor.gameObject.GetComponentInChildren<RefuelPort>();
+            //refueler = port.currentRefuelPlane;
+            //RefuelPlaneTraverse = Traverse.Create(refueler);
         }
 
         private void Update()

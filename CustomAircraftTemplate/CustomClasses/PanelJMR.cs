@@ -4,9 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace A10Mod.CustomClasses
+namespace A10Mod
 {
     class PanelJMR : PanelText
     {
+        protected override void UpdateText()
+        {
+            SetText("OFF");
+        }  
+
     }
+
+
 }
+
