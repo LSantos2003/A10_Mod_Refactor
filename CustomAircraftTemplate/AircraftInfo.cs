@@ -20,13 +20,13 @@ namespace A10Mod
         //Info about your aircraft
         public const string AircraftName = "A-10D";
         public const string AircraftNickName = "Warthog";
-        public const string AircraftDescription = "\"Warthog\" A stealthy attack/bomber aircraft with two internal weapon bays. Using an experimental stealth coating, it has a lower rcs than that of the F-45A";
+        public const string AircraftDescription = "\"Warthog\" A dedicated close air support platform. Well known for its durability, endurance, and its 30mm cannon";
 
         //Names of the various files you need to put in your builds folder
         public const string PreviewPngFileName = "A10_Preview.png";
         public const string AircraftAssetbundleName = "a10c";
         public const string UnityMoverFileName = "warthogPositions.surg";
-        public const string AIUnityMoverFileName = "NighthawkPositionsAI.surg";
+        public const string AIUnityMoverFileName = "warthogPositionsAI.surg";
 
         //Name of the prefab of your aircraft from the assetbundle
         public const string AircraftPrefabName = "A10_V3.prefab";

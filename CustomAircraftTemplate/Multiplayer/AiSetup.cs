@@ -16,10 +16,12 @@ namespace A10Mod
 
 		public static void CreateAi(GameObject aiObject)
         {
+
+
 			UnityMover mover = aiObject.gameObject.AddComponent<UnityMover>();
 			mover.gs = aiObject.gameObject;
 			mover.FileName = AircraftInfo.AIUnityMoverFileName;
-			//mover.load(false);
+			mover.load(false);
 
 			Disable26MeshAi(aiObject);
 
@@ -40,9 +42,53 @@ namespace A10Mod
 
 			SetUpRefuelPort(aiObject, aircraft);
 
-
+			SetUpEngines(aiObject, aircraft);
+			SetUpWheels(aiObject, aircraft);
 			SetUpRadarIcon(aiObject);
+			//DisableGun(aiObject);
 		}
+
+		public static void DisableGun(GameObject aiAircraft)
+        {
+
+			Gun gun = aiAircraft.GetComponentInChildren<Gun>(true);
+			AircraftAPI.DisableMesh(gun.gameObject);
+		}
+
+
+		public static void SetUpWheels(GameObject aiAircraft, GameObject customAircraft)
+		{
+			WheelsController wheelController = aiAircraft.GetComponent<WheelsController>();
+			CopyRotation copyRot = AircraftAPI.GetChildWithName(customAircraft, "FrontWheelPivot").GetComponentInChildren<CopyRotation>(true);
+			copyRot.target = wheelController.steeringTransform;
+
+			SuspensionWheelAnimator frontSus = AircraftAPI.GetChildWithName(aiAircraft, "FrontGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
+			SuspensionWheelAnimator leftSus = AircraftAPI.GetChildWithName(aiAircraft, "LeftGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
+			SuspensionWheelAnimator rightSus = AircraftAPI.GetChildWithName(aiAircraft, "RightGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
+
+			SuspensionWheelAnimator frontSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "FrontWheelPivot").GetComponentInChildren<SuspensionWheelAnimator>(true);
+			SuspensionWheelAnimator leftSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "GearLeft").GetComponentInChildren<SuspensionWheelAnimator>(true);
+			SuspensionWheelAnimator rightSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "GearRight").GetComponentInChildren<SuspensionWheelAnimator>(true);
+
+			frontSusCustomAircraft.suspension = frontSus.suspension;
+			leftSusCustomAircraft.suspension = leftSus.suspension;
+			rightSusCustomAircraft.suspension = rightSus.suspension;
+
+		}
+
+
+		public static void SetUpEngines(GameObject aiAircraft, GameObject customAircraft)
+        {
+			foreach(EngineRotator r in customAircraft.GetComponentsInChildren<EngineRotator>(true))
+            {
+				r.engine = aiAircraft.GetComponentInChildren<ModuleEngine>(true);
+            }
+
+			foreach(ModuleEngine e in aiAircraft.GetComponentsInChildren<ModuleEngine>(true))
+			{
+				e.autoAB = false;
+            }
+        }
 
 		public static void Disable26MeshAi(GameObject go)
 		{
@@ -50,8 +96,8 @@ namespace A10Mod
 			AircraftAPI.DisableMesh(go, componentInChildren);
 			
 		}
-
-		public static void CreateControlSurfaces(GameObject aiAircraft, GameObject customAircraft)
+		
+			public static void CreateControlSurfaces(GameObject aiAircraft, GameObject customAircraft)
 		{
 
 			AeroController controller = aiAircraft.GetComponentInChildren<AeroController>();
@@ -76,11 +122,7 @@ namespace A10Mod
 			//LeftRudder
 			AircraftAPI.CreateControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "RudderLeftTf").transform, new Vector3(0, -1, 0), 15, 80, 0, 0, 1, 0, -1, false, 0, 0);
 
-			//Creates the flaps
-			VRLever flapsLever = AircraftAPI.FindInteractable("Flaps").GetComponent<VRLever>();
 
-			//Right Flaps
-			GameObject a10RightFlaps = AircraftAPI.GetChildWithName(customAircraft, "FlapsRight");
 		}
 
 		public static void SetUpRCS(GameObject aiAircraft)

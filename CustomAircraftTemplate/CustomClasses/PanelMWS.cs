@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,19 @@ namespace A10Mod
     {
         public MissileDetector detector;
 
+        private float warningTime = 4;
+        private bool launchDetected = false;
+
+        private Coroutine detectRoutine = null;
+        private void Start()
+        {
+            this.detector.OnMissileLaunchDetected.AddListener(OnLaunchDetected);
+        }
+
+        private void OnDisable()
+        {
+            this.detector.OnMissileLaunchDetected.RemoveListener(OnLaunchDetected);
+        }
 
         protected override void UpdateText()
         {
@@ -21,7 +35,7 @@ namespace A10Mod
                 return;
             }
 
-            if(detector.enabled && detector.missileIncomingDetected)
+            if(detector.enabled && launchDetected)
             {
                 SetText("LAUNCH");
                 return;
@@ -29,6 +43,29 @@ namespace A10Mod
 
             SetText("ACTIVE");
         }
+        private void OnLaunchDetected()
+        {
+            if(detectRoutine != null)
+            {
+                StopCoroutine(detectRoutine);
+                return;
+            }
+
+            this.detectRoutine = StartCoroutine(LaunchDetectRoutine());
+
+        }
+
+
+        private IEnumerator LaunchDetectRoutine()
+        {
+            this.launchDetected = true;
+            yield return new WaitForSeconds(this.warningTime);
+
+            this.launchDetected = false;
+            this.detectRoutine = null;
+
+        }
 
     }
+
 }

@@ -46,7 +46,7 @@
     </Reference>
     <Reference Include="Multiplayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Vidjagames\Steam\steamapps\common\VTOL VR\VTOLVR_ModLoader\mods\Multiplayer\Multiplayer.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\VTOL VR\VTOLVR_ModLoader\mods\Multiplayer\Multiplayer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -105,13 +105,21 @@
     <Compile Include="CustomClasses\FlapsAnimator.cs" />
     <Compile Include="CustomClasses\HPEquipRadarJammer.cs" />
     <Compile Include="CustomClasses\PanelCMS.cs" />
+    <Compile Include="CustomClasses\PanelCMSP4.cs" />
+    <Compile Include="CustomClasses\PanelCMSP3.cs" />
+    <Compile Include="CustomClasses\PanelCMSP2.cs" />
+    <Compile Include="CustomClasses\PanelCMSP1.cs" />
+    <Compile Include="CustomClasses\PanelJMR.cs" />
+    <Compile Include="CustomClasses\PanelLock.cs" />
     <Compile Include="CustomClasses\PanelMWS.cs" />
     <Compile Include="CustomClasses\PanelText.cs" />
     <Compile Include="CustomClasses\RadarJammer.cs" />
+    <Compile Include="GAUSetUp.cs" />
     <Compile Include="Instruments\AoAIndexer.cs" />
     <Compile Include="Instruments\DashAccelGauge.cs" />
     <Compile Include="Instruments\DashAOAGauge.cs" />
     <Compile Include="Instruments\DashAPUTemp.cs" />
+    <Compile Include="Instruments\DashClock.cs" />
     <Compile Include="Instruments\DashCompass.cs" />
     <Compile Include="Instruments\DashEngineFlow.cs" />
     <Compile Include="Instruments\DashFuelNumGauge.cs" />
@@ -126,10 +134,12 @@
     <Compile Include="CustomClasses\CustomLandingGear.cs" />
     <Compile Include="HelperScripts\FileLoader.cs" />
     <Compile Include="Multiplayer\MpPlugin.cs" />
+    <Compile Include="Patches\GunSpawnPatch.cs" />
     <Compile Include="Patches\InternalBayPatch.cs" />
     <Compile Include="Patches\LoadoutConfigPatch.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\PilotSelectPatch.cs" />
+    <Compile Include="Patches\WMPatch.cs" />
     <Compile Include="PlayerSpawn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HelperScripts\UnityMover.cs" />

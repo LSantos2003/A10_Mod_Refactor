@@ -18,6 +18,8 @@ namespace A10Mod
 
         public static void SetUpBottomLeft()
         {
+            
+
             WeaponManager wm = AircraftSetup.Fa26.GetComponentInChildren<WeaponManager>(true);
 
             VRLever altModeSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Alt Select").GetComponent<VRLever>();
@@ -87,8 +89,21 @@ namespace A10Mod
             VRLever hudToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "HUD Toggle").GetComponent<VRLever>();
             hudToggleLever.OnSetState.AddListener(AircraftAPI.GetChildWithName(AircraftSetup.Fa26, "HUDCanvas").GetComponent<ObjectPowerUnit>().SetConnection);
 
+            VRLever hmcsToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "HMCS Toggle").GetComponent<VRLever>();
+            hmcsToggleLever.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<HelmetController>(true).SetPower);
 
+
+            VTOLQuickStart quickStart = AircraftSetup.Fa26.GetComponentInChildren<VTOLQuickStart>(true);
+
+            quickStart.quickStartComponents.OnApplySettings.AddListener(new UnityAction(() =>
+            {
+                hudToggleLever.RemoteSetState(1);
+                hmcsToggleLever.RemoteSetState(1);
+            }
+            ));
         }
+
+
 
 
         public static void SetUpEngineStart()
@@ -102,8 +117,8 @@ namespace A10Mod
 
             Battery battery = AircraftSetup.Fa26.GetComponentInChildren<Battery>(true);
          
-            VRLever hudToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Battery").GetComponent<VRLever>();
-            hudToggleLever.OnSetState.AddListener(battery.SetConnection);
+            VRLever batteryLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Battery").GetComponent<VRLever>();
+            batteryLever.OnSetState.AddListener(battery.SetConnection);
 
             ModuleEngine engineL = null;
             ModuleEngine engineR = null;
@@ -130,6 +145,18 @@ namespace A10Mod
             VRLever apuLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "APU Start").GetComponent<VRLever>();
             apuLever.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<AuxilliaryPowerUnit>(true).SetPower);
 
+
+            VTOLQuickStart quickStart = AircraftSetup.Fa26.GetComponentInChildren<VTOLQuickStart>(true);
+
+            quickStart.quickStartComponents.OnApplySettings.AddListener(new UnityAction(() =>
+            {
+                batteryLever.RemoteSetState(1);
+                leftEngineLever.RemoteSetState(1);
+                rightEngineLever.RemoteSetState(1);
+
+            }
+            ));
+
         }
 
         public static void SetUpRightPanel()
@@ -143,26 +170,76 @@ namespace A10Mod
                 mws.enabled = num == 1 || num == 2;
             }));
 
+            MFD mmfdLeft = null;
+            foreach (var mfd in AircraftSetup.Fa26.GetComponentsInChildren<MFD>(true))
+            {
+                if (mfd.name == "MiniMFDLeft")
+                {
+                    mmfdLeft = mfd;
+                    break;
+                }
+            }
+
 
             VRLever rwrSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "RWR Switch").GetComponent<VRLever>();
             rwrSwitch.OnSetState.AddListener(new UnityAction<int>((num) =>
             {
-                rwr.enabled = num != 0;
+                if (!mmfdLeft.powerOn)
+                {
+                    mmfdLeft.TogglePower();
+                }
+
                 if (num == 0)
                 {
                     rwr.SetMasterMode((int)DashRWR.RWRModes.Off);
                     // Traverse.Create(rwr).Field("detectedPings").SetValue(new Dictionary<int, RWRIcon>());
                 }
                 else if (num == 1)
+                {
+                    mmfdLeft.SetPage("rwr");
                     rwr.SetMasterMode((int)DashRWR.RWRModes.Silent);
+                }
                 else
+                {
+                    mmfdLeft.SetPage("rwr");
                     rwr.SetMasterMode((int)DashRWR.RWRModes.On);
+
+                }
+
             })); // you can tell where i took over this code  
 
             VRLever cmsSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "CMS Dispenser").GetComponent<VRLever>();
             cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<CMSConfigUI>(true).SetFlares);
             cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<CMSConfigUI>(true).SetChaff);
+            cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP1>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP2>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP3>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP4>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<AutoCMS>(true).SetCMSEnabled);
 
+            VRInteractable set1 = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "SET CHAFF");
+            set1.OnInteract.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP1>(true).IncrementChaffQuantity);
+
+            VRInteractable set2 = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "SET FLARE");
+            set2.OnInteract.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP2>(true).IncrementFlareQuantity);
+
+            VRInteractable set3 = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "SET INTERVAL");
+            set3.OnInteract.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP3>(true).IncrementReleaseInterval);
+
+
+            VRTwistKnobInt cmsKnob = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "CMS Mode Select").GetComponent<VRTwistKnobInt>();
+            cmsKnob.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<AutoCMS>(true).SetCMSMode);
+
+            VTOLQuickStart quickStart = AircraftSetup.Fa26.GetComponentInChildren<VTOLQuickStart>(true);
+
+            quickStart.quickStartComponents.OnApplySettings.AddListener(new UnityAction(() =>
+            {
+                cmsSwitch.RemoteSetState(1);
+                mwsToggleLever.RemoteSetState(1);
+                rwrSwitch.RemoteSetState(2);
+
+            }
+            ));
         }
 
 

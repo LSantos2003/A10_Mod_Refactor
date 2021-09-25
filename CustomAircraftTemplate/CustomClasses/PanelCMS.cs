@@ -10,6 +10,7 @@ namespace A10Mod
     {
         public ChaffCountermeasure chaff;
         public FlareCountermeasure flares;
+        public AutoCMS autoCms;
 
         protected override void UpdateText()
         {
@@ -19,9 +20,24 @@ namespace A10Mod
 
         private string GenerateText()
         {
-            string cmProgram = "D";
+            string cmProgram = this.autoCms.GetCurrentProgram();
             string chaffCounter = chaff.count.ToString("D3");
-            string cmMode = "S";
+
+            string cmMode = " ";
+            switch (this.autoCms.GetCurrentMode())
+            {
+                case AutoCMS.Mode.AUTO:
+                    cmMode = "A";
+                    break;
+                case AutoCMS.Mode.SEMI:
+                    cmMode = "S";
+                    break;
+                case AutoCMS.Mode.MANUAL:
+                    cmMode = "M";
+                    break;
+
+            }
+      
             string flareCounter = flares.count.ToString("D3");
 
             return cmProgram + chaffCounter + cmMode + flareCounter;

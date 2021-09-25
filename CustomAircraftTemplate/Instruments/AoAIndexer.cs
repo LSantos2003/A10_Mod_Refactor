@@ -15,8 +15,8 @@ namespace A10Mod
         {
             this.currentState = determineState(flightInfo.aoa);
 
-
-            if (this.gear.state == GearAnimator.GearStates.Extended && this.battery.connected)
+            //Checks if gear is extended or surface speed is above 21 m/s
+            if (this.gear.state == GearAnimator.GearStates.Extended && this.battery.connected && this.flightInfo.surfaceSpeed > 25)
             {
                 //sets emission mult to 1 cause for some reason restarting the mission sets it to 0
                 this.aoaUpText.emissionMult = 1;

@@ -20,6 +20,8 @@ namespace A10Mod
         //Stores a prefab of the aircraft in order to spawn it in whenever you want
         public static GameObject aircraftPrefab;
         public static GameObject ECMJammerPrefab;
+        public static Sprite hudMaskSprite;
+        public static Texture a10Sprite; 
 
         public static GameObject playerGameObject;
         public MpPlugin plugin = null;
@@ -42,7 +44,7 @@ namespace A10Mod
             Debug.Log("Got le " + aircraftPrefab.name);
 
             //Loads in the jammer
-            GameObject ANAL = FileLoader.GetAssetBundleAsGameObject(pathToBundle, "A-10C_ECM_Jammer.prefab"); // throwback moment
+            /*GameObject ANAL = FileLoader.GetAssetBundleAsGameObject(pathToBundle, "A-10C_ECM_Jammer.prefab"); // throwback moment
             ECMJammerPrefab = Instantiate(ANAL);
             ECMJammerPrefab.transform.localScale = new Vector3(2.8f, 2.8f, 2.8f);
             HPEquippable analEquip = ECMJammerPrefab.AddComponent<HPEquipRadarJammer>();
@@ -58,8 +60,17 @@ namespace A10Mod
             AircraftAPI.GetChildWithName(ECMJammerPrefab, "A-10C_ECM_Jammer_Model").AddComponent<RadarJammer>();
             DontDestroyOnLoad(ECMJammerPrefab);
             ECMJammerPrefab.SetActive(false);
-
+            
             Debug.Log("Got le " + ECMJammerPrefab.name);
+            */
+
+            //Loads in the a10 sprites
+            string pathToSprites = Path.Combine(instance.ModFolder, "a10sprites");
+            hudMaskSprite = (Sprite)FileLoader.GetAssetBundleAsType<Sprite>(pathToSprites, "Sqaure_Mask");
+            Debug.Log("Got le " + hudMaskSprite.name);
+
+            a10Sprite = (Texture)FileLoader.GetAssetBundleAsType<Texture>(pathToSprites, "A10_Sprite");
+            Debug.Log("Got le " + a10Sprite.name);
 
             //Adds the custom plane to the main menu
             StartCoroutine(AircraftAPI.CreatePlaneMenuItem());

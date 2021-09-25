@@ -17,7 +17,7 @@ namespace A10Mod
         }
         private void Update()
         {
-            if (!battery.connected)
+            if (!battery.connected || battery.currentCharge <= 0.01f)
             {
                 SetText("");
                 return;
