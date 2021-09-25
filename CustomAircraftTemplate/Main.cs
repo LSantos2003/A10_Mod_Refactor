@@ -1,4 +1,4 @@
-using Harmony;
+﻿using Harmony;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -73,9 +73,9 @@ namespace A10Mod
             Debug.Log("Got le " + a10Sprite.name);
 
             //Adds the custom plane to the main menu
-            StartCoroutine(AircraftAPI.CreatePlaneMenuItem());
-   
-           
+            StartCoroutine(AircraftAPI.CreatePlaneMenuItem());
+
+
 
             //This is an event the VTOLAPI calls when the game is done loading a scene
             VTOLAPI.SceneLoaded += SceneLoaded;
