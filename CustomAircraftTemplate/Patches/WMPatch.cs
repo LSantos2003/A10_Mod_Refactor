@@ -19,6 +19,9 @@ namespace A10Mod
     {
         public static bool Prefix(WeaponManager __instance, Loadout loadout)
         {
+            if (!AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B) return true;
+
+
             Traverse wm = Traverse.Create(__instance);
 
             wm.Field("maxAntiAirRange").SetValue(0f);

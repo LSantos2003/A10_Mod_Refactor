@@ -110,12 +110,12 @@ namespace A10Mod
                 allowedhardpointbyweapon.Add("fa26_aim9x2", "1, 10");
                 allowedhardpointbyweapon.Add("fa26_aim9x3", "");
                 allowedhardpointbyweapon.Add("fa26_cagm-6", "");
-                allowedhardpointbyweapon.Add("fa26_cbu97x1", "1,2,3,10,7,6,5,4, 13, 9");
+                allowedhardpointbyweapon.Add("fa26_cbu97x1", "1,2,3,10,7,6,5,4, 13, 9,8");
                 allowedhardpointbyweapon.Add("fa26_droptank", "7,4, 13");
                 allowedhardpointbyweapon.Add("fa26_droptankXL", "");
-                allowedhardpointbyweapon.Add("fa26_gbu12x1", "1, 10,7,6,5,4, 13,2, 9");
+                allowedhardpointbyweapon.Add("fa26_gbu12x1", "1, 10,7,6,5,4, 13,2, 9,3,8");
                 allowedhardpointbyweapon.Add("fa26_gbu12x2", "");
-                allowedhardpointbyweapon.Add("fa26_gbu12x3", "7,4,3");
+                allowedhardpointbyweapon.Add("fa26_gbu12x3", "7,4,3,8");
                 allowedhardpointbyweapon.Add("fa26_gbu38x1", "8,7,6,5,4,3");
                 allowedhardpointbyweapon.Add("fa26_gbu38x2", "");
                 allowedhardpointbyweapon.Add("fa26_gbu38x3", "7,4");
@@ -140,7 +140,7 @@ namespace A10Mod
                 allowedhardpointbyweapon.Add("fa26_sidearmx3", "");
                 allowedhardpointbyweapon.Add("fa26_tgp", "9,2");
                 allowedhardpointbyweapon.Add("cagm-6", "");
-                allowedhardpointbyweapon.Add("cbu97x1", "3,7,6,5,4,13,9");
+                allowedhardpointbyweapon.Add("cbu97x1", "3,7,6,5,4,13,9,8");
                 allowedhardpointbyweapon.Add("gbu38x1", "10,8,7,6,5,4,3");
                 allowedhardpointbyweapon.Add("gbu38x2", "");
                 allowedhardpointbyweapon.Add("gbu38x3", "7,6,5,4");

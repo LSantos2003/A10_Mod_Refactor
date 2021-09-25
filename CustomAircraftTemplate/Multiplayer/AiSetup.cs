@@ -79,7 +79,7 @@ namespace A10Mod
 
 		public static void SetUpEngines(GameObject aiAircraft, GameObject customAircraft)
         {
-			foreach(EngineRotator r in customAircraft.GetComponentsInChildren<EngineRotator>())
+			foreach(EngineRotator r in customAircraft.GetComponentsInChildren<EngineRotator>(true))
             {
 				r.engine = aiAircraft.GetComponentInChildren<ModuleEngine>(true);
             }
@@ -122,11 +122,7 @@ namespace A10Mod
 			//LeftRudder
 			AircraftAPI.CreateControlSurface(controller, AircraftAPI.GetChildWithName(customAircraft, "RudderLeftTf").transform, new Vector3(0, -1, 0), 15, 80, 0, 0, 1, 0, -1, false, 0, 0);
 
-			//Creates the flaps
-			VRLever flapsLever = AircraftAPI.FindInteractable("Flaps").GetComponent<VRLever>();
 
-			//Right Flaps
-			GameObject a10RightFlaps = AircraftAPI.GetChildWithName(customAircraft, "FlapsRight");
 		}
 
 		public static void SetUpRCS(GameObject aiAircraft)
