@@ -139,6 +139,7 @@
     <Compile Include="Patches\LoadoutConfigPatch.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\PilotSelectPatch.cs" />
+    <Compile Include="Patches\RemoveRedundantMFDElementsPatch.cs" />
     <Compile Include="Patches\WMPatch.cs" />
     <Compile Include="PlayerSpawn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
