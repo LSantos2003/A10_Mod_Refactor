@@ -30,7 +30,7 @@ namespace A10Mod
         // This method is run once, when the Mod Loader is done initialising this game object
         public override void ModLoaded()
         {
-         
+
             HarmonyInstance harmonyInstance = HarmonyInstance.Create(AircraftInfo.HarmonyId);
             harmonyInstance.PatchAll();
 
