@@ -48,7 +48,7 @@ namespace A10Mod
             canopyAnim.animator = AircraftAPI.GetChildWithName(customAircraft, "CanopyAnimationObject").GetComponent<Animator>();
             canopyAnim.canopyTf = AircraftAPI.GetChildWithName(customAircraft, "CanopyAnimationObject").transform;
 
-            Fa26.GetComponentInChildren<EjectionSeat>().canopyObject = AircraftAPI.GetChildWithName(customAircraft, "CanopyAnimationObject");
+            Fa26.GetComponentInChildren<EjectionSeat>(true).canopyObject = AircraftAPI.GetChildWithName(customAircraft, "CanopyAnimationObject");
 
             faCanopyAnim.SetActive(true);
             AircraftAPI.DisableMesh(AircraftAPI.GetChildWithName(Fa26, "Canopy"), wm);
@@ -124,6 +124,9 @@ namespace A10Mod
                 Traverse gunTraverse = Traverse.Create(gun);
                 gunTraverse.Field("hasEjectTf").SetValue(false);
                 gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
+                gun.audioProfiles[0].firingSound = Main.gauFireClip;
+                gun.audioProfiles[0].stopFiringSound = Main.gauEndClip;
+                gun.audioProfiles[0].audioSource.pitch = 1f;
                 AircraftAPI.DisableMesh(gun.gameObject);
 
                 //gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;
@@ -752,6 +755,18 @@ namespace A10Mod
             mapTest.transform.localScale = bigScale;
             mapTransform.transform.localScale = bigScale;
 
+        }
+
+        public static void SetUpRWRSounds()
+        {
+            DashRWR rwr = Fa26.GetComponentInChildren<DashRWR>(true);
+            rwr.missileBlip = Main.radarLockClip;
+            rwr.radarBlip = Main.radarBlipClip;
+            rwr.newContactBlip = Main.newContactClip;
+            rwr.lockBlip = Main.radarLockClip;
+
+            FlightWarnings warnings = Fa26.GetComponentInChildren<FlightWarnings>(true);
+            warnings.commonWarningsClips.MissileLaunch = Main.missileLaunchClip;
         }
 
         public static void SetUpRCS()

@@ -10,24 +10,24 @@ using UnityStandardAssets.ImageEffects;
 namespace A10Mod
 {
     
-    [HarmonyPatch(typeof(InternalWeaponBay), nameof(InternalWeaponBay.Awake))]
+    [HarmonyPatch(typeof(InternalWeaponBay),"Awake")]
     class InternalBayPatch
     {
 
         public static bool Prefix()
         {
-            return false;
+            return true;
         }
     }
 
 
-    [HarmonyPatch(typeof(InternalWeaponBay), nameof(InternalWeaponBay.Start))]
+    [HarmonyPatch(typeof(InternalWeaponBay), "Start")]
     class InternalBayPatchStart
     {
 
         public static bool Prefix(InternalWeaponBay __instance)
         {
-            __instance.weaponManager.OnWeaponEquipped += __instance.WeaponManager_OnWeaponEquipped;
+          
             return true;
         }
     }

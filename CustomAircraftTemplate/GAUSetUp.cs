@@ -100,6 +100,9 @@ namespace A10Mod
                 Traverse gunTraverse = Traverse.Create(gun);
                 gunTraverse.Field("hasEjectTf").SetValue(false);
                 gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(AircraftSetup.customAircraft, "BarrelTf").transform;
+                gun.audioProfiles[0].firingSound = Main.gauFireClip;
+                gun.audioProfiles[0].stopFiringSound = Main.gauEndClip;
+                gun.audioProfiles[0].audioSource.pitch = 1f;
                 AircraftAPI.DisableMesh(gun.gameObject);
 
                 //gun.gameObject.GetComponent<GunBarrelRotator>().rotationTransform = AircraftAPI.GetChildWithName(customAircraft, "BarrelTf").transform;

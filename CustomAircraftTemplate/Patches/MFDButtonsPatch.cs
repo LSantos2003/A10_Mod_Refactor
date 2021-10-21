@@ -6,13 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace A10Mod.Patches
+namespace A10Mod
 {
-    [HarmonyPatch(typeof(MFD), nameof(MFD.Initialize))]
+    [HarmonyPatch(typeof(MFD), "Initialize")]
     class Patch_MFDButtons
     {
         public static bool Prefix(MFD __instance, MFDPage homePage)
         {
+
+            if (!AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B) return true;
+
+
             if (homePage.buttons == null || homePage.buttons.Length == 0)
                 return true;
             MFDPage.MFDButtonInfo[] newButtons = new MFDPage.MFDButtonInfo[14];
@@ -34,11 +38,16 @@ namespace A10Mod.Patches
         }
     }
 
-    [HarmonyPatch(typeof(MFDPage), nameof(MFDPage.Awake))]
+    [HarmonyPatch(typeof(MFDPage), "Awake")]
     class Patch_TGPButtons
     {
         public static bool Prefix(MFDPage __instance)
         {
+
+
+            if (!AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B) return true;
+
+
             if (__instance.pageName == "target")
             {
                 MFDPage.MFDButtonInfo[] newButtons = new MFDPage.MFDButtonInfo[12];

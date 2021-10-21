@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Steamworks;
+
 namespace A10Mod
 {
     public class PanelMWS : PanelText
@@ -27,7 +29,8 @@ namespace A10Mod
 
         protected override void UpdateText()
         {
-       
+
+
 
             if (!detector.enabled)
             {

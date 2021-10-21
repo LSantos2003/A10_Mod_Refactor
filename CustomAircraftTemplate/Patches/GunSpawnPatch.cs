@@ -9,7 +9,7 @@ using UnityEngine;
 namespace A10Mod
 {
 
-    [HarmonyPatch(typeof(Gun), nameof(Gun.Start))]
+    [HarmonyPatch(typeof(Gun), "Start")]
     class GunSpawnPatch
     {
 
@@ -30,6 +30,10 @@ namespace A10Mod
             {
                 __instance.maxAmmo = 1300;
                 __instance.ejectTransform = null;
+
+                __instance.audioProfiles[0].firingSound = Main.gauFireClip;
+                __instance.audioProfiles[0].stopFiringSound = Main.gauEndClip;
+                __instance.audioProfiles[0].audioSource.pitch = 1f;
                 AircraftAPI.DisableMesh(__instance.gameObject);
 
             }

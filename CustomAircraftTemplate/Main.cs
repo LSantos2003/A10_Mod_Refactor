@@ -21,7 +21,18 @@ namespace A10Mod
         public static GameObject aircraftPrefab;
         public static GameObject ECMJammerPrefab;
         public static Sprite hudMaskSprite;
-        public static Texture a10Sprite; 
+        public static Texture a10Sprite;
+
+        //Gun audio clips
+        public static AudioClip gauFireClip;
+        public static AudioClip gauEndClip;
+
+        //RWR audio clips
+        public static AudioClip missileLaunchClip;
+        public static AudioClip radarBlipClip;
+        public static AudioClip radarLockClip;
+        public static AudioClip newContactClip;
+
 
         public static GameObject playerGameObject;
         public MpPlugin plugin = null;
@@ -30,6 +41,8 @@ namespace A10Mod
         // This method is run once, when the Mod Loader is done initialising this game object
         public override void ModLoaded()
         {
+
+            
 
             HarmonyInstance harmonyInstance = HarmonyInstance.Create(AircraftInfo.HarmonyId);
             harmonyInstance.PatchAll();
@@ -72,8 +85,28 @@ namespace A10Mod
             a10Sprite = (Texture)FileLoader.GetAssetBundleAsType<Texture>(pathToSprites, "A10_Sprite");
             Debug.Log("Got le " + a10Sprite.name);
 
+            gauFireClip = (AudioClip)FileLoader.GetAssetBundleAsType<AudioClip>(pathToSprites, "GAU8Cannon");
+            Debug.Log("Got le " + gauFireClip.name);
+
+
+            gauEndClip = (AudioClip)FileLoader.GetAssetBundleAsType<AudioClip>(pathToSprites, "GAU8End");
+            Debug.Log("Got le " + gauEndClip.name);
+
+
+            radarBlipClip = (AudioClip)FileLoader.GetAssetBundleAsType<AudioClip>(pathToSprites, "RadarSearchA10");
+            Debug.Log("Got le " + radarBlipClip.name);
+
+            radarLockClip = (AudioClip)FileLoader.GetAssetBundleAsType<AudioClip>(pathToSprites, "EnemyRadarLOCKA10");
+            Debug.Log("Got le " + radarLockClip.name);
+
+            newContactClip = (AudioClip)FileLoader.GetAssetBundleAsType<AudioClip>(pathToSprites, "NewContactA10");
+            Debug.Log("Got le " + newContactClip.name);
+
+            missileLaunchClip = (AudioClip)FileLoader.GetAssetBundleAsType<AudioClip>(pathToSprites, "MissleLaunchWarningA10");
+            Debug.Log("Got le " + missileLaunchClip.name);
+
             //Adds the custom plane to the main menu
-            StartCoroutine(AircraftAPI.CreatePlaneMenuItem());
+            StartCoroutine(AircraftAPI.CreatePlaneMenuItem());
 
 
 
@@ -86,6 +119,11 @@ namespace A10Mod
 
         }
 
+        public void Start()
+        {
+
+
+        }
         public void checkMPloaded()
         {
             FlightLogger.Log("checking Multiplayer is installed");

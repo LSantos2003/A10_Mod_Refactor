@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Steamworks;
+using UnityEngine;
 
 namespace A10Mod
 {
@@ -14,6 +16,8 @@ namespace A10Mod
 
         protected override void UpdateText()
         {
+
+
             SetText(GenerateText());
 
         }

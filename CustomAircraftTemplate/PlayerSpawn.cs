@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace A10Mod
 {
-    [HarmonyPatch(typeof(WeaponManager), nameof(WeaponManager.Awake))]
+    [HarmonyPatch(typeof(WeaponManager), "Awake")]
     class PlayerSpawnAwakePatch
     {
 
@@ -122,7 +122,7 @@ namespace A10Mod
 
                 AircraftSetup.SetUpSideCMSPanel();
 
-
+                AircraftSetup.SetUpRWRSounds();
                 //AircraftAPI.FindInteractable("Toggle Altitude Mode").OnInteract.AddListener(logRCS);
 
 
@@ -153,7 +153,7 @@ namespace A10Mod
     }
 
 
-    [HarmonyPatch(typeof(WeaponManager), nameof(WeaponManager.Start))]
+    [HarmonyPatch(typeof(WeaponManager), "Start")]
     class PlayerSpawnStartPatch
     {
 

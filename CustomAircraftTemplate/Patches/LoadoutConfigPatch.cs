@@ -128,7 +128,7 @@ namespace A10Mod
                 allowedhardpointbyweapon.Add("fa26_iris-t-x2", "");
                 allowedhardpointbyweapon.Add("fa26_iris-t-x3", "");
                 allowedhardpointbyweapon.Add("fa26_maverickx1", "8,7,6,5,4,3");
-                allowedhardpointbyweapon.Add("fa26_maverickx3", "3,7,6,5,4");
+                allowedhardpointbyweapon.Add("fa26_maverickx3", "3,8,7,4");
                 allowedhardpointbyweapon.Add("fa26_mk82HDx1", "10,8,6,5,3,1, 13, 2, 9");
                 allowedhardpointbyweapon.Add("fa26_mk82HDx2", "");
                 allowedhardpointbyweapon.Add("fa26_mk82HDx3", "8,7,6,5,4,3");
@@ -156,7 +156,7 @@ namespace A10Mod
                 allowedhardpointbyweapon.Add("m230", "");
                 allowedhardpointbyweapon.Add("marmx1", "");
                 allowedhardpointbyweapon.Add("maverickx1", "8,7,6,5,4,3,2");
-                allowedhardpointbyweapon.Add("maverickx3", "8,7,6,5,4,3");
+                allowedhardpointbyweapon.Add("maverickx3", "8,7,4,3");
                 allowedhardpointbyweapon.Add("mk82HDx1", "10,8,7,6,5,4,3");
                 allowedhardpointbyweapon.Add("mk82HDx2", "");
                 allowedhardpointbyweapon.Add("mk82HDx3", "8,7,6,5,4,3");
@@ -175,7 +175,7 @@ namespace A10Mod
                 allowedhardpointbyweapon.Add("af_amraamRailx2", "");
                 allowedhardpointbyweapon.Add("af_dropTank", "13");
                 allowedhardpointbyweapon.Add("af_maverickx1", "8,7,6,5,4,3,2");
-                allowedhardpointbyweapon.Add("af_maverickx3", "8,7,6,5,4,3");
+                allowedhardpointbyweapon.Add("af_maverickx3", "8,7,4,3");
                 allowedhardpointbyweapon.Add("af_mk82", "1,3,10, 13, 2, 9,8");
                 allowedhardpointbyweapon.Add("af_tgp", "9,2,13");
                 allowedhardpointbyweapon.Add("h70-x7ld", "2,8,3,9");

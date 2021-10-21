@@ -98,6 +98,10 @@
     <Reference Include="UnityEngine.UnityWebRequestTextureModule">
       <HintPath>..\Dependencies\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
     </Reference>
+    <Reference Include="Valve.Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\VTOL VR\VTOLVR_Data\Managed\Valve.Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AircraftSwitchSetup.cs" />
@@ -139,7 +143,7 @@
     <Compile Include="Patches\LoadoutConfigPatch.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Patches\PilotSelectPatch.cs" />
-    <Compile Include="Patches\RemoveRedundantMFDElementsPatch.cs" />
+    <Compile Include="Patches\MFDButtonsPatch.cs" />
     <Compile Include="Patches\WMPatch.cs" />
     <Compile Include="PlayerSpawn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
