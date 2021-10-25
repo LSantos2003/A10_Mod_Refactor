@@ -138,10 +138,10 @@ namespace A10Mod
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown("l"))
+           /* if (Input.GetKeyDown("l"))
             {
                 load();
-            }
+            }*/
         }
     }
 }

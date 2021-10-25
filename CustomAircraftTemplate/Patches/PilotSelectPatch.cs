@@ -60,7 +60,7 @@ namespace A10Mod
             if (vehicle.vehicleName == AircraftInfo.AircraftName)
             {
 
-                FlightLogger.Log("Nighthawk ran!");
+                FlightLogger.Log("Warthog ran!");
                 //Bool that decides whether or not to run all the aircraft spawn code
                 AircraftInfo.AircraftSelected = true;
                 Main.instance.checkMPloaded();
@@ -71,7 +71,7 @@ namespace A10Mod
 
                 lockAircraftSelect = true;
 
-
+                
                 __instance.SelectVehicle(PilotSaveManager.GetVehicle("F/A-26B"), null);
                 return false;
             }

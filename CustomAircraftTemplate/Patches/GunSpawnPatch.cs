@@ -5,11 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VTOLVR.Multiplayer;
 
 namespace A10Mod
 {
 
-    [HarmonyPatch(typeof(Gun), "Start")]
+    [HarmonyPatch(typeof(Gun), "Awake")]
     class GunSpawnPatch
     {
 
@@ -26,7 +27,12 @@ namespace A10Mod
 
             }
 
-            if (mpCheck && __instance.gameObject.GetComponentInParent<PlayerFlightLogger>() && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected)
+            PerTeamRadarSymbol symbol = __instance.gameObject.GetComponentInChildren<PerTeamRadarSymbol>(true);
+
+            bool isLocalAircraft = symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
+            bool isClientAircraft = symbol && symbol.teamASymbol == "26";
+
+            if (isLocalAircraft || isClientAircraft)
             {
                 __instance.maxAmmo = 1300;
                 __instance.ejectTransform = null;

@@ -16,21 +16,21 @@ namespace A10Mod
         public static bool hotStart = false;
 
 
-        public static void SetUpBottomLeft()
+        public static void SetUpBottomLeft(GameObject customAircraft, GameObject Fa26)
         {
             
 
-            WeaponManager wm = AircraftSetup.Fa26.GetComponentInChildren<WeaponManager>(true);
+            WeaponManager wm = Fa26.GetComponentInChildren<WeaponManager>(true);
 
-            VRLever altModeSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Alt Select").GetComponent<VRLever>();
-            altModeSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponent<VehicleMaster>().SetRadarAltMode);
+            VRLever altModeSwitch = AircraftAPI.FindInteractable(customAircraft, "Alt Select").GetComponent<VRLever>();
+            altModeSwitch.OnSetState.AddListener(Fa26.GetComponent<VehicleMaster>().SetRadarAltMode);
 
-            VRLever masterArmSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Master Arm").GetComponent<VRLever>();
-            masterArmSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<WeaponManagerUI>().UISetMasterArm);
+            VRLever masterArmSwitch = AircraftAPI.FindInteractable(customAircraft, "Master Arm").GetComponent<VRLever>();
+            masterArmSwitch.OnSetState.AddListener(Fa26.GetComponentInChildren<WeaponManagerUI>(true).UISetMasterArm);
 
 
-            VRLever tgpSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "TGP Arm").GetComponent<VRLever>();
-            TargetingMFDPage targetPage = AircraftSetup.Fa26.GetComponentInChildren<TargetingMFDPage>(true);
+            VRLever tgpSwitch = AircraftAPI.FindInteractable(customAircraft, "TGP Arm").GetComponent<VRLever>();
+            TargetingMFDPage targetPage = Fa26.GetComponentInChildren<TargetingMFDPage>(true);
             tgpSwitch.OnSetState.AddListener(new UnityAction<int>((num) =>
             {
                 if (!targetPage.powered && num == 1)
@@ -47,11 +47,11 @@ namespace A10Mod
             ));
 
 
-            ApplyColorToAllUI changedHud = AircraftSetup.Fa26.GetComponentInChildren<ApplyColorToAllUI>(true);
-            VRLever hudColorSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "HUD Color").GetComponent<VRLever>();
+            ApplyColorToAllUI changedHud = Fa26.GetComponentInChildren<ApplyColorToAllUI>(true);
+            VRLever hudColorSwitch = AircraftAPI.FindInteractable(customAircraft, "HUD Color").GetComponent<VRLever>();
             hudColorSwitch.OnSetState.AddListener(delegate (int num)
             {
-                //GameObject HUD = AircraftAPI.GetChildWithName(AircraftSetup.customAircraft, "HUDParent");
+                //GameObject HUD = AircraftAPI.GetChildWithName(customAircraft, "HUDParent");
                 if (num > 0)
                 {
                     changedHud.color = new Color32(163, 255, 79, 216);
@@ -68,7 +68,7 @@ namespace A10Mod
             );
 
             /*HPEquippable gunEquip = wm.GetEquip(0);
-            VRLever gunArmLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Gun Arm").GetComponent<VRLever>();
+            VRLever gunArmLever = AircraftAPI.FindInteractable(customAircraft, "Gun Arm").GetComponent<VRLever>();
             gunArmLever.OnSetState.AddListener(new UnityAction<int>((num) =>
             {
                 if (num > 0)
@@ -86,14 +86,14 @@ namespace A10Mod
         ));*/
 
 
-            VRLever hudToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "HUD Toggle").GetComponent<VRLever>();
-            hudToggleLever.OnSetState.AddListener(AircraftAPI.GetChildWithName(AircraftSetup.Fa26, "HUDCanvas").GetComponent<ObjectPowerUnit>().SetConnection);
+            VRLever hudToggleLever = AircraftAPI.FindInteractable(customAircraft, "HUD Toggle").GetComponent<VRLever>();
+            hudToggleLever.OnSetState.AddListener(AircraftAPI.GetChildWithName(Fa26, "HUDCanvas").GetComponent<ObjectPowerUnit>().SetConnection);
 
-            VRLever hmcsToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "HMCS Toggle").GetComponent<VRLever>();
-            hmcsToggleLever.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<HelmetController>(true).SetPower);
+            VRLever hmcsToggleLever = AircraftAPI.FindInteractable(customAircraft, "HMCS Toggle").GetComponent<VRLever>();
+            hmcsToggleLever.OnSetState.AddListener(Fa26.GetComponentInChildren<HelmetController>(true).SetPower);
 
 
-            VTOLQuickStart quickStart = AircraftSetup.Fa26.GetComponentInChildren<VTOLQuickStart>(true);
+            VTOLQuickStart quickStart = Fa26.GetComponentInChildren<VTOLQuickStart>(true);
 
             quickStart.quickStartComponents.OnApplySettings.AddListener(new UnityAction(() =>
             {
@@ -112,17 +112,17 @@ namespace A10Mod
 
         }
 
-        public static void SetUpGenerators()
+        public static void SetUpGenerators(GameObject customAircraft, GameObject Fa26)
         {
 
-            Battery battery = AircraftSetup.Fa26.GetComponentInChildren<Battery>(true);
+            Battery battery = Fa26.GetComponentInChildren<Battery>(true);
          
-            VRLever batteryLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Battery").GetComponent<VRLever>();
+            VRLever batteryLever = AircraftAPI.FindInteractable(customAircraft, "Battery").GetComponent<VRLever>();
             batteryLever.OnSetState.AddListener(battery.SetConnection);
 
             ModuleEngine engineL = null;
             ModuleEngine engineR = null;
-            foreach (ModuleEngine engine in AircraftSetup.Fa26.GetComponentsInChildren<ModuleEngine>(true))
+            foreach (ModuleEngine engine in Fa26.GetComponentsInChildren<ModuleEngine>(true))
             {
                 if (engine.name.ToLower().Contains("left"))
                 {
@@ -135,18 +135,18 @@ namespace A10Mod
 
             }
 
-            VRLever leftEngineLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Left Engine Start").GetComponent<VRLever>();
+            VRLever leftEngineLever = AircraftAPI.FindInteractable(customAircraft, "Left Engine Start").GetComponent<VRLever>();
             leftEngineLever.OnSetState.AddListener(engineL.SetPower);
 
-            VRLever rightEngineLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Right Engine Start").GetComponent<VRLever>();
+            VRLever rightEngineLever = AircraftAPI.FindInteractable(customAircraft, "Right Engine Start").GetComponent<VRLever>();
             rightEngineLever.OnSetState.AddListener(engineR.SetPower);
 
 
-            VRLever apuLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "APU Start").GetComponent<VRLever>();
-            apuLever.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<AuxilliaryPowerUnit>(true).SetPower);
+            VRLever apuLever = AircraftAPI.FindInteractable(customAircraft, "APU Start").GetComponent<VRLever>();
+            apuLever.OnSetState.AddListener(Fa26.GetComponentInChildren<AuxilliaryPowerUnit>(true).SetPower);
 
 
-            VTOLQuickStart quickStart = AircraftSetup.Fa26.GetComponentInChildren<VTOLQuickStart>(true);
+            VTOLQuickStart quickStart = Fa26.GetComponentInChildren<VTOLQuickStart>(true);
 
             quickStart.quickStartComponents.OnApplySettings.AddListener(new UnityAction(() =>
             {
@@ -159,19 +159,19 @@ namespace A10Mod
 
         }
 
-        public static void SetUpRightPanel()
+        public static void SetUpRightPanel(GameObject customAircraft, GameObject Fa26)
         {
-            DashRWR rwr = AircraftSetup.Fa26.GetComponentInChildren<DashRWR>(true);
+            DashRWR rwr = Fa26.GetComponentInChildren<DashRWR>(true);
             MissileDetector mws = rwr.missileDetector;
 
-            VRLever mwsToggleLever = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "MWS Switch").GetComponent<VRLever>();
+            VRLever mwsToggleLever = AircraftAPI.FindInteractable(customAircraft, "MWS Switch").GetComponent<VRLever>();
             mwsToggleLever.OnSetState.AddListener(new UnityAction<int>((num) =>
             {
                 mws.enabled = num == 1 || num == 2;
             }));
 
             MFD mmfdLeft = null;
-            foreach (var mfd in AircraftSetup.Fa26.GetComponentsInChildren<MFD>(true))
+            foreach (var mfd in Fa26.GetComponentsInChildren<MFD>(true))
             {
                 if (mfd.name == "MiniMFDLeft")
                 {
@@ -181,7 +181,7 @@ namespace A10Mod
             }
 
 
-            VRLever rwrSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "RWR Switch").GetComponent<VRLever>();
+            VRLever rwrSwitch = AircraftAPI.FindInteractable(customAircraft, "RWR Switch").GetComponent<VRLever>();
             rwrSwitch.OnSetState.AddListener(new UnityAction<int>((num) =>
             {
                 if (!mmfdLeft.powerOn)
@@ -208,29 +208,29 @@ namespace A10Mod
 
             })); // you can tell where i took over this code  
 
-            VRLever cmsSwitch = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "CMS Dispenser").GetComponent<VRLever>();
-            cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<CMSConfigUI>(true).SetFlares);
-            cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<CMSConfigUI>(true).SetChaff);
-            cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP1>(true).SetPage);
-            cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP2>(true).SetPage);
-            cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP3>(true).SetPage);
-            cmsSwitch.OnSetState.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP4>(true).SetPage);
-            cmsSwitch.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<AutoCMS>(true).SetCMSEnabled);
+            VRLever cmsSwitch = AircraftAPI.FindInteractable(customAircraft, "CMS Dispenser").GetComponent<VRLever>();
+            cmsSwitch.OnSetState.AddListener(Fa26.GetComponentInChildren<CMSConfigUI>(true).SetFlares);
+            cmsSwitch.OnSetState.AddListener(Fa26.GetComponentInChildren<CMSConfigUI>(true).SetChaff);
+            cmsSwitch.OnSetState.AddListener(customAircraft.GetComponentInChildren<PanelCMSP1>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(customAircraft.GetComponentInChildren<PanelCMSP2>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(customAircraft.GetComponentInChildren<PanelCMSP3>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(customAircraft.GetComponentInChildren<PanelCMSP4>(true).SetPage);
+            cmsSwitch.OnSetState.AddListener(Fa26.GetComponentInChildren<AutoCMS>(true).SetCMSEnabled);
 
-            VRInteractable set1 = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "SET CHAFF");
-            set1.OnInteract.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP1>(true).IncrementChaffQuantity);
+            VRInteractable set1 = AircraftAPI.FindInteractable(customAircraft, "SET CHAFF");
+            set1.OnInteract.AddListener(customAircraft.GetComponentInChildren<PanelCMSP1>(true).IncrementChaffQuantity);
 
-            VRInteractable set2 = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "SET FLARE");
-            set2.OnInteract.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP2>(true).IncrementFlareQuantity);
+            VRInteractable set2 = AircraftAPI.FindInteractable(customAircraft, "SET FLARE");
+            set2.OnInteract.AddListener(customAircraft.GetComponentInChildren<PanelCMSP2>(true).IncrementFlareQuantity);
 
-            VRInteractable set3 = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "SET INTERVAL");
-            set3.OnInteract.AddListener(AircraftSetup.customAircraft.GetComponentInChildren<PanelCMSP3>(true).IncrementReleaseInterval);
+            VRInteractable set3 = AircraftAPI.FindInteractable(customAircraft, "SET INTERVAL");
+            set3.OnInteract.AddListener(customAircraft.GetComponentInChildren<PanelCMSP3>(true).IncrementReleaseInterval);
 
 
-            VRTwistKnobInt cmsKnob = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "CMS Mode Select").GetComponent<VRTwistKnobInt>();
-            cmsKnob.OnSetState.AddListener(AircraftSetup.Fa26.GetComponentInChildren<AutoCMS>(true).SetCMSMode);
+            VRTwistKnobInt cmsKnob = AircraftAPI.FindInteractable(customAircraft, "CMS Mode Select").GetComponent<VRTwistKnobInt>();
+            cmsKnob.OnSetState.AddListener(Fa26.GetComponentInChildren<AutoCMS>(true).SetCMSMode);
 
-            VTOLQuickStart quickStart = AircraftSetup.Fa26.GetComponentInChildren<VTOLQuickStart>(true);
+            VTOLQuickStart quickStart = Fa26.GetComponentInChildren<VTOLQuickStart>(true);
 
             quickStart.quickStartComponents.OnApplySettings.AddListener(new UnityAction(() =>
             {
@@ -243,15 +243,15 @@ namespace A10Mod
         }
 
 
-        public static void SetUpEmergency()
+        public static void SetUpEmergency(GameObject customAircraft, GameObject Fa26)
         {
-            WeaponManager wm = AircraftSetup.Fa26.GetComponentInChildren<WeaponManager>(true);
+            WeaponManager wm = Fa26.GetComponentInChildren<WeaponManager>(true);
 
-            VRInteractable jettisonButton = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Emergency Jettison");
+            VRInteractable jettisonButton = AircraftAPI.FindInteractable(customAircraft, "Emergency Jettison");
             jettisonButton.OnInteract.AddListener(new UnityAction(() =>
             {
 
-                WeaponManagerUI ui = AircraftSetup.Fa26.GetComponentInChildren<WeaponManagerUI>(true);
+                WeaponManagerUI ui = Fa26.GetComponentInChildren<WeaponManagerUI>(true);
                 ui.MarkAllJettison();
 
                 for (int i = 0; i < wm.equipCount; i++)
@@ -266,10 +266,10 @@ namespace A10Mod
             ));
 
 
-            AuxilliaryPowerUnit apu = AircraftSetup.Fa26.GetComponentInChildren<AuxilliaryPowerUnit>(true);
+            AuxilliaryPowerUnit apu = Fa26.GetComponentInChildren<AuxilliaryPowerUnit>(true);
             ModuleEngine engineL = null;
             ModuleEngine engineR = null;
-            foreach (ModuleEngine engine in AircraftSetup.Fa26.GetComponentsInChildren<ModuleEngine>(true))
+            foreach (ModuleEngine engine in Fa26.GetComponentsInChildren<ModuleEngine>(true))
             {
                 if (engine.name.ToLower().Contains("left"))
                 {
@@ -282,13 +282,13 @@ namespace A10Mod
 
             }
 
-            EjectHandle rightEject = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Right EXT").GetComponent<EjectHandle>();
+            EjectHandle rightEject = AircraftAPI.FindInteractable(customAircraft, "Right EXT").GetComponent<EjectHandle>();
             rightEject.OnHandlePull.AddListener(new UnityAction(() => { ExtinguishFire(engineR); }));
 
-            EjectHandle leftEject = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "Left EXT").GetComponent<EjectHandle>();
+            EjectHandle leftEject = AircraftAPI.FindInteractable(customAircraft, "Left EXT").GetComponent<EjectHandle>();
             leftEject.OnHandlePull.AddListener(new UnityAction(() => { ExtinguishFire(engineL); }));
 
-            EjectHandle apuEject = AircraftAPI.FindInteractable(AircraftSetup.customAircraft, "APU Ext").GetComponent<EjectHandle>();
+            EjectHandle apuEject = AircraftAPI.FindInteractable(customAircraft, "APU Ext").GetComponent<EjectHandle>();
             apuEject.OnHandlePull.AddListener(new UnityAction(() => { RepairAPU(apu); }));
 
 

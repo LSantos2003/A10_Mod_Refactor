@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VTOLVR.Multiplayer;
+
 
 namespace A10Mod
 {
@@ -15,10 +17,6 @@ namespace A10Mod
         public static void AddGau(LoadoutConfigurator config)
         {
             //Waits for loadout configuator to exist
-
-            GameObject go = VTOLAPI.GetPlayersVehicleGameObject();
-            WeaponManager wm = go.GetComponent<WeaponManager>();
-            weaponManager = wm;
 
             //Gets the gau-8 gameobject
             string path = PilotSaveManager.GetVehicle("AV-42C").equipsResourcePath + "/" + "gau-8";
@@ -76,7 +74,18 @@ namespace A10Mod
             config.OnAttachHPIdx += HideGau;
             config.OnAttachHPIdx += SetUpGun;
             config.AttachImmediate("gau-8", 0);
-            AircraftAPI.DisableMesh(weaponManager.hardpointTransforms[0].gameObject);
+
+            if (!VTOLMPUtils.IsMultiplayer())
+            {
+
+                GameObject go = VTOLAPI.GetPlayersVehicleGameObject();
+                WeaponManager wm = go.GetComponent<WeaponManager>();
+                weaponManager = wm;
+
+
+                AircraftAPI.DisableMesh(weaponManager.hardpointTransforms[0].gameObject);
+            }
+           
         }
 
         private static void HideGau(int value)

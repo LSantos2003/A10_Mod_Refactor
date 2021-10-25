@@ -121,7 +121,7 @@ namespace A10Mod
 
         public void Start()
         {
-
+            Debug.Log("New save path: " + PilotSaveManager.newSaveDataPath);
 
         }
         public void checkMPloaded()
@@ -145,7 +145,7 @@ namespace A10Mod
         //This method is called every frame by Unity. Here you'll probably put most of your code
         void Update()
         {
-            
+            AircraftInfo.AircraftSelected = true;
         }
 
         //This method is like update but it's framerate independent. This means it gets called at a set time interval instead of every frame. This is useful for physics calculations

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using VTOLVR.Multiplayer;
 namespace A10Mod
 {
     [HarmonyPatch(typeof(WeaponManager), "Awake")]
@@ -28,7 +28,15 @@ namespace A10Mod
 
             }
 
-            if (mpCheck && __instance.gameObject.GetComponentInChildren<PlayerFlightLogger>() && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected)
+            PerTeamRadarSymbol symbol = __instance.gameObject.GetComponentInChildren<PerTeamRadarSymbol>(true);
+            //the check to see if the actor belongs to the local player
+            bool isLocalAircraft = __instance.isPlayer && mpCheck && symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected; 
+
+            //the check to see if another player is using a custom aircraft and if their base aircraft is an fa-26
+            //NOTE: Only works if the base aircraft has a radar. Gonna have to do a different check to see if it's an AV-42
+            bool isClientAircraft = symbol && symbol.teamASymbol == "26" && !__instance.isPlayer; 
+
+            if (isLocalAircraft || isClientAircraft)
             {
                 Main.playerGameObject = __instance.gameObject;
 
@@ -44,7 +52,7 @@ namespace A10Mod
 
              
 
-                FlightLogger.Log("About to add warthog");
+                FlightLogger.Log($"About to add {AircraftInfo.AircraftNickName}");
 
 
 
@@ -56,6 +64,7 @@ namespace A10Mod
 
                 AircraftSetup.Fa26 = Main.playerGameObject;
                 AircraftSetup.customAircraft = aircraft;
+
 
                 //Creates the canopy animation and assigns the canopyobject to the ejection seat
                 AircraftSetup.CreateCanopyAnimation();
@@ -89,9 +98,6 @@ namespace A10Mod
                 //Parents a10 wings to fa26's
                 //AircraftSetup.SetUpWingDamage();
 
-                //Changes depth and scale of the hud to make it legible
-                AircraftSetup.SetUpHud();
-
                 //AircraftSetup.SetUpMissileLaunchers();
 
                 //Disables the Fa26's wingflex so nav lights don't get screwy
@@ -100,40 +106,47 @@ namespace A10Mod
                 //Assigns the correct variables for the EOTS
                 //AircraftSetup.SetUpEOTS();
 
-                //Fixes the weird shifting nav map bug. Must be called after unity mover
-                AircraftSetup.ScaleNavMap();
-
-                //Changes mfd color to green
-                AircraftSetup.SetUpMFD();
-
-                AircraftSetup.SetUpGauges();
-
-                AircraftSetup.SetUpClock();
-
-                AircraftSetup.SetUpGaugeGlow();
 
                 AircraftSetup.ChangeRWRIcon();
 
                 AircraftSetup.SetUpFlares();
-
-                AircraftSetup.SetUpAutoCMS();
-
-                AircraftSetup.SetUpFrontCMSPanel();
-
-                AircraftSetup.SetUpSideCMSPanel();
-
-                AircraftSetup.SetUpRWRSounds();
                 //AircraftAPI.FindInteractable("Toggle Altitude Mode").OnInteract.AddListener(logRCS);
-
-
-                //Sets up knob interactables in the a-10
-                //Make sure this is one of the last methods called in order for it
-                //to grab the right components
-                AircraftSetup.SetUpKnobs();
 
                 AircraftSetup.SetUpFormationLights();
 
-            
+
+                if (isLocalAircraft)
+                {
+                    //Changes depth and scale of the hud to make it legible
+                    AircraftSetup.SetUpHud();
+
+                    //Fixes the weird shifting nav map bug. Must be called after unity mover
+                    AircraftSetup.ScaleNavMap();
+
+                    //Changes mfd color to green
+                    AircraftSetup.SetUpMFD();
+
+                    AircraftSetup.SetUpGauges();
+
+                    AircraftSetup.SetUpClock();
+
+                    AircraftSetup.SetUpGaugeGlow();
+
+
+                    AircraftSetup.SetUpAutoCMS();
+
+                    AircraftSetup.SetUpFrontCMSPanel();
+
+                    AircraftSetup.SetUpSideCMSPanel();
+
+                    AircraftSetup.SetUpRWRSounds();
+
+                    //Sets up knob interactables in the a-10
+                    //Make sure this is one of the last methods called in order for it
+                    //to grab the right components
+                    AircraftSetup.SetUpKnobs();
+                }
+
 
                 FlightLogger.Log("Disabling mesh");
                 AircraftAPI.Disable26Mesh();
@@ -162,9 +175,17 @@ namespace A10Mod
         {
 
             FlightLogger.Log("Start prefix ran in wm!");
-            if (__instance.gameObject.GetComponentInChildren<PlayerFlightLogger>() && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected)
+
+            PerTeamRadarSymbol symbol = __instance.gameObject.GetComponentInChildren<PerTeamRadarSymbol>(true);
+
+
+            bool isLocalAircraft =  symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
+            bool isClientAircraft = symbol && symbol.teamASymbol == "26";
+
+            if (isLocalAircraft || isClientAircraft)
             {
 
+                GameObject fa26 = __instance.gameObject;
                 //Makes missiles compatabile with the internal bays
                 //AircraftSetup.SetUpMissileLaunchers();
 
@@ -175,12 +196,14 @@ namespace A10Mod
                 AircraftSetup.SetWingFold();
                 AircraftSetup.SetUpGun();
 
-                AircraftSwitchSetup.SetUpBottomLeft();
-                AircraftSwitchSetup.SetUpEngineStart();
-                AircraftSwitchSetup.SetUpGenerators();
-                AircraftSwitchSetup.SetUpEmergency();
-                AircraftSwitchSetup.SetUpRightPanel();
-               
+                if (isLocalAircraft)
+                {
+                    AircraftSwitchSetup.SetUpBottomLeft(fa26, fa26);
+                    AircraftSwitchSetup.SetUpEngineStart();
+                    AircraftSwitchSetup.SetUpGenerators(fa26, fa26);
+                    AircraftSwitchSetup.SetUpEmergency(fa26, fa26);
+                    AircraftSwitchSetup.SetUpRightPanel(fa26, fa26);
+                }
 
             }
         }
@@ -189,12 +212,27 @@ namespace A10Mod
         public static void Postfix(WeaponManager __instance)
         {
             FlightLogger.Log("Start postfix ran in wm!");
-            if (__instance.gameObject.GetComponentInChildren<PlayerFlightLogger>() && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected)
-            {
-                AircraftSetup.SetUpIndexers();
 
-                //Auto selects the rwr page on the MMFD
-                AircraftSetup.SetUpRWR();
+
+            PerTeamRadarSymbol symbol = __instance.gameObject.GetComponentInChildren<PerTeamRadarSymbol>(true);
+
+            bool isLocalAircraft = symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
+            bool isClientAircraft = symbol && symbol.teamASymbol == "26";
+
+
+            if (isLocalAircraft || isClientAircraft)
+            {
+                //Gets rid of the steam textures on the rudder
+                AircraftAPI.Disable26SteamTextures();
+
+
+                if (isLocalAircraft)
+                {
+                    AircraftSetup.SetUpIndexers();
+
+                    //Auto selects the rwr page on the MMFD
+                    AircraftSetup.SetUpRWR();
+                }
 
                 //AircraftSetup.SetUpGun();
 

@@ -144,6 +144,17 @@ namespace A10Mod
 
         }
 
+        public static void Disable26SteamTextures()
+        {
+            GameObject go = Main.playerGameObject;
+
+            //Disables the steam image graphics
+            GetChildWithName(go, "tailGraphicRudderLeft").SetActive(false);
+            GetChildWithName(go, "tailGraphicLeft").SetActive(false);
+            GetChildWithName(go, "tailGraphicRudderRight").SetActive(false);
+            GetChildWithName(go, "tailGraphicRight").SetActive(false);
+        }
+
         public static GameObject GetChildWithName(GameObject obj, string name)
         {
 

@@ -43,9 +43,10 @@ namespace A10Mod
 
             if (!AircraftInfo.AircraftSelected || VTOLAPI.GetPlayersVehicleEnum() != VTOLVehicles.FA26B) return;
 
-            GAUSetUp.AddGau(__instance);
+            //Uncomment to renable gau
+           // GAUSetUp.AddGau(__instance);
             __instance.lockedHardpoints.Add(0);
-            GAUSetUp.SetUpGun(0);
+            //GAUSetUp.SetUpGun(0);
 
 
             AircraftAPI.GetChildWithName(__instance.gameObject, "title").gameObject.GetComponent<Text>().text = AircraftInfo.AircraftName;

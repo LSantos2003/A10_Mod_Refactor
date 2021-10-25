@@ -434,6 +434,7 @@ namespace A10Mod
             VRLever gearLever = AircraftAPI.FindInteractable("Landing Gear").gameObject.GetComponent<VRLever>();
             CustomLandingGear gear = customAircraft.AddComponent<CustomLandingGear>();
             gear.animToggle = AircraftAPI.GetChildWithName(customAircraft, "GearAnimator").GetComponent<AnimationToggle>();
+            gear.gearAnim = Fa26.GetComponentInChildren<GearAnimator>(true);
             gear.gearLever = gearLever;
         }
         public static void SetUpHardpoints()
@@ -629,7 +630,7 @@ namespace A10Mod
             cms.manager = Fa26.GetComponentInChildren<CountermeasureManager>(true);
             cms.rwr = Fa26.GetComponentInChildren<ModuleRWR>(true);
 
-            VRThrottle throttle = Fa26.GetComponentInChildren<VRThrottle>();
+            VRThrottle throttle = Fa26.GetComponentInChildren<VRThrottle>(true);
             throttle.OnMenuButtonDown = new UnityEvent();
             throttle.OnMenuButtonUp = new UnityEvent();
 
@@ -848,7 +849,7 @@ namespace A10Mod
         public static IEnumerator RWRRoutine()
         {
             yield return new WaitForSeconds(1);
-            DashRWR rwr = AircraftSetup.Fa26.GetComponentInChildren<DashRWR>(true);
+            DashRWR rwr = Fa26.GetComponentInChildren<DashRWR>(true);
 
             foreach (var mfd in Fa26.GetComponentsInChildren<MFD>(true))
             {

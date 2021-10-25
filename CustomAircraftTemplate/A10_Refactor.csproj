@@ -35,8 +35,9 @@
       <HintPath>..\Dependencies\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Accessibility" />
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\VTOL VR\VTOLVR_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
@@ -138,6 +139,7 @@
     <Compile Include="CustomClasses\CustomLandingGear.cs" />
     <Compile Include="HelperScripts\FileLoader.cs" />
     <Compile Include="Multiplayer\MpPlugin.cs" />
+    <Compile Include="Patches\PilotSavePatch.cs" />
     <Compile Include="Patches\GunSpawnPatch.cs" />
     <Compile Include="Patches\InternalBayPatch.cs" />
     <Compile Include="Patches\LoadoutConfigPatch.cs" />
