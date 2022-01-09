@@ -33,7 +33,8 @@ namespace A10Mod
             }
         }
 
-       
+
+
         public static void CreateCanopyAnimation()
         {
             WeaponManager wm = Fa26.GetComponentInChildren<WeaponManager>(true);
@@ -44,11 +45,12 @@ namespace A10Mod
 
             //Attach any handles for the canopy animation here!
             //canopyAnim.handleInteractables[0] = leftHandleInt;
-            
-            canopyAnim.animator = AircraftAPI.GetChildWithName(customAircraft, "CanopyAnimationObject").GetComponent<Animator>();
-            canopyAnim.canopyTf = AircraftAPI.GetChildWithName(customAircraft, "CanopyAnimationObject").transform;
 
-            Fa26.GetComponentInChildren<EjectionSeat>(true).canopyObject = AircraftAPI.GetChildWithName(customAircraft, "CanopyAnimationObject");
+            GameObject canopyAnimObject = AircraftAPI.GetChildWithName(customAircraft, "CanopyAnimationObject");
+            canopyAnim.animator = canopyAnimObject.GetComponent<Animator>();
+            canopyAnim.canopyTf = canopyAnimObject.transform;
+
+            Fa26.GetComponentInChildren<EjectionSeat>(true).canopyObject = canopyAnimObject;
 
             faCanopyAnim.SetActive(true);
             AircraftAPI.DisableMesh(AircraftAPI.GetChildWithName(Fa26, "Canopy"), wm);
@@ -563,14 +565,16 @@ namespace A10Mod
         public static void SetUpWheels()
         {
             WheelsController wheelController = Fa26.GetComponent<WheelsController>();
-            CopyRotation copyRot = AircraftAPI.GetChildWithName(customAircraft, "FrontWheelPivot").GetComponentInChildren<CopyRotation>(true);
+            GameObject frontWheelPivot = AircraftAPI.GetChildWithName(customAircraft, "FrontWheelPivot");
+
+            CopyRotation copyRot = frontWheelPivot.GetComponentInChildren<CopyRotation>(true);
             copyRot.target = wheelController.steeringTransform;
 
             SuspensionWheelAnimator frontSus = AircraftAPI.GetChildWithName(Fa26, "FrontGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
             SuspensionWheelAnimator leftSus = AircraftAPI.GetChildWithName(Fa26, "LeftGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
             SuspensionWheelAnimator rightSus = AircraftAPI.GetChildWithName(Fa26, "RightGear").GetComponentInChildren<SuspensionWheelAnimator>(true);
 
-            SuspensionWheelAnimator frontSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "FrontWheelPivot").GetComponentInChildren<SuspensionWheelAnimator>(true);
+            SuspensionWheelAnimator frontSusCustomAircraft = frontWheelPivot.GetComponentInChildren<SuspensionWheelAnimator>(true);
             SuspensionWheelAnimator leftSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "GearLeft").GetComponentInChildren<SuspensionWheelAnimator>(true);
             SuspensionWheelAnimator rightSusCustomAircraft = AircraftAPI.GetChildWithName(customAircraft, "GearRight").GetComponentInChildren<SuspensionWheelAnimator>(true);
 
@@ -618,7 +622,9 @@ namespace A10Mod
 
         public static void SetUpFlares()
         {
-            Fa26.GetComponentInChildren<FlareCountermeasure>(true).maxCount = 240;
+            FlareCountermeasure cm = Fa26.GetComponentInChildren<FlareCountermeasure>(true);
+            cm.maxCount = 240;
+            cm.SetCount(240);
         }
 
         public static void SetUpAutoCMS()
@@ -819,10 +825,14 @@ namespace A10Mod
 
         public static void SetUpFormationLights()
         {
+            FormationLightSync lightSync = customAircraft.AddComponent<FormationLightSync>();
+
             SwitchableMaterialEmission emission = customAircraft.GetComponentInChildren<SwitchableMaterialEmission>(true);
             emission.battery = Fa26.GetComponentInChildren<Battery>(true);
 
             VRTwistKnob formationKnob = AircraftAPI.FindInteractable(customAircraft, "Formation Lights").GetComponent<VRTwistKnob>();
+            lightSync.knob = formationKnob;
+
             formationKnob.OnSetState.AddListener(new UnityAction<float>((num) =>
             {
                 if (num > 0)

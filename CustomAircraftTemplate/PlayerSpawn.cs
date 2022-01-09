@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using VTOLVR.Multiplayer;
+using System.Diagnostics;
 namespace A10Mod
 {
     [HarmonyPatch(typeof(WeaponManager), "Awake")]
@@ -17,7 +18,7 @@ namespace A10Mod
         private static Vector3 aircraftLocalScale= Vector3.one * 2.745594f;
        
 
-        public static void Prefix(WeaponManager __instance)
+        public static void Postfix(WeaponManager __instance)
         {
             FlightLogger.Log("Awake prefix ran in wm!");
             bool mpCheck = true;
@@ -29,12 +30,20 @@ namespace A10Mod
             }
 
             PerTeamRadarSymbol symbol = __instance.gameObject.GetComponentInChildren<PerTeamRadarSymbol>(true);
+            PlayerVehicleNetSync entity = __instance.gameObject.GetComponent<PlayerVehicleNetSync>();
+
+            //Breaks out in case the actor doesn't have a playervehiclenetsync object
+
+
             //the check to see if the actor belongs to the local player
-            bool isLocalAircraft = __instance.isPlayer && mpCheck && symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected; 
+            bool isLocalAircraft = entity && entity.isMine && mpCheck && symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
 
             //the check to see if another player is using a custom aircraft and if their base aircraft is an fa-26
             //NOTE: Only works if the base aircraft has a radar. Gonna have to do a different check to see if it's an AV-42
-            bool isClientAircraft = symbol && symbol.teamASymbol == "26" && !__instance.isPlayer; 
+            bool isClientAircraft = entity && !entity.isMine && symbol && symbol.teamASymbol == "26";
+
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
 
             if (isLocalAircraft || isClientAircraft)
             {
@@ -43,14 +52,16 @@ namespace A10Mod
 
                 AircraftAPI.FindSwitchBounds();
 
-                
-                UnityMover mover = __instance.gameObject.AddComponent<UnityMover>();
-                mover.gs = __instance.gameObject;
-                mover.FileName = AircraftInfo.UnityMoverFileName;
-                mover.load(true);
-               
+                if (true)
+                {
+                    UnityMover mover = __instance.gameObject.AddComponent<UnityMover>();
+                    mover.gs = __instance.gameObject;
+                    mover.FileName = AircraftInfo.UnityMoverFileName;
+                    mover.load(true);
 
-             
+                }
+
+
 
                 FlightLogger.Log($"About to add {AircraftInfo.AircraftNickName}");
 
@@ -65,7 +76,7 @@ namespace A10Mod
                 AircraftSetup.Fa26 = Main.playerGameObject;
                 AircraftSetup.customAircraft = aircraft;
 
-
+                timer.Stop();
                 //Creates the canopy animation and assigns the canopyobject to the ejection seat
                 AircraftSetup.CreateCanopyAnimation();
 
@@ -76,12 +87,9 @@ namespace A10Mod
                 //Creates the custom landing gear
                 AircraftSetup.CreateLandingGear();
 
-                //Moves the hardpoints in the correct location
-                //AircraftSetup.SetUpHardpoints();
 
                 //Attaches the refuel port animation to the refuel port class
                 AircraftSetup.SetUpRefuelPort();
-
 
                 //Assigns the suspension components to the custom aircraft landing gear
                 AircraftSetup.SetUpWheels();
@@ -89,34 +97,20 @@ namespace A10Mod
                 //Changes characteristics of the engines
                 AircraftSetup.SetUpEngines();
 
-                //Reduces FA-26 mass
-                AircraftSetup.SetUpMass();
-
-                //Increases lift
-                AircraftSetup.SetUpFlightModel();
-
                 //Parents a10 wings to fa26's
                 //AircraftSetup.SetUpWingDamage();
 
-                //AircraftSetup.SetUpMissileLaunchers();
 
                 //Disables the Fa26's wingflex so nav lights don't get screwy
                 AircraftSetup.DisableWingFlex();
 
-                //Assigns the correct variables for the EOTS
-                //AircraftSetup.SetUpEOTS();
-
-
-                AircraftSetup.ChangeRWRIcon();
-
-                AircraftSetup.SetUpFlares();
-                //AircraftAPI.FindInteractable("Toggle Altitude Mode").OnInteract.AddListener(logRCS);
 
                 AircraftSetup.SetUpFormationLights();
 
 
                 if (isLocalAircraft)
                 {
+
                     //Changes depth and scale of the hud to make it legible
                     AircraftSetup.SetUpHud();
 
@@ -141,20 +135,36 @@ namespace A10Mod
 
                     AircraftSetup.SetUpRWRSounds();
 
+
+                    //Reduces FA-26 mass
+                    AircraftSetup.SetUpMass();
+
+                    //Increases lift
+                    AircraftSetup.SetUpFlightModel();
+
+                    AircraftSetup.ChangeRWRIcon();
+
+                    AircraftSetup.SetUpFlares();
+
                     //Sets up knob interactables in the a-10
                     //Make sure this is one of the last methods called in order for it
                     //to grab the right components
                     AircraftSetup.SetUpKnobs();
                 }
 
+              
+                FlightLogger.Log("Function took: " + timer.ElapsedMilliseconds.ToString());
+
 
                 FlightLogger.Log("Disabling mesh");
+
                 AircraftAPI.Disable26Mesh();
                
 
 
             }
         }
+
 
         public static void logRCS()
         {
@@ -177,10 +187,17 @@ namespace A10Mod
             FlightLogger.Log("Start prefix ran in wm!");
 
             PerTeamRadarSymbol symbol = __instance.gameObject.GetComponentInChildren<PerTeamRadarSymbol>(true);
+            PlayerVehicleNetSync entity = __instance.gameObject.GetComponent<PlayerVehicleNetSync>();
+
+            //Breaks out in case the actor doesn't have a playervehiclenetsync object
 
 
-            bool isLocalAircraft =  symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
-            bool isClientAircraft = symbol && symbol.teamASymbol == "26";
+            //the check to see if the actor belongs to the local player
+            bool isLocalAircraft = entity && entity.isMine && symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
+
+            //the check to see if another player is using a custom aircraft and if their base aircraft is an fa-26
+            //NOTE: Only works if the base aircraft has a radar. Gonna have to do a different check to see if it's an AV-42
+            bool isClientAircraft = entity && !entity.isMine && symbol && symbol.teamASymbol == "26";
 
             if (isLocalAircraft || isClientAircraft)
             {
@@ -215,9 +232,15 @@ namespace A10Mod
 
 
             PerTeamRadarSymbol symbol = __instance.gameObject.GetComponentInChildren<PerTeamRadarSymbol>(true);
+            PlayerVehicleNetSync entity = __instance.gameObject.GetComponent<PlayerVehicleNetSync>();
 
-            bool isLocalAircraft = symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
-            bool isClientAircraft = symbol && symbol.teamASymbol == "26";
+       
+            //the check to see if the actor belongs to the local player
+            bool isLocalAircraft = entity && entity.isMine && symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
+
+            //the check to see if another player is using a custom aircraft and if their base aircraft is an fa-26
+            //NOTE: Only works if the base aircraft has a radar. Gonna have to do a different check to see if it's an AV-42
+            bool isClientAircraft = entity && !entity.isMine && symbol && symbol.teamASymbol == "26";
 
 
             if (isLocalAircraft || isClientAircraft)

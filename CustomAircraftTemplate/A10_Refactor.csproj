@@ -42,6 +42,7 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="Facepunch.Steamworks.Win64, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="ModLoader">
       <HintPath>D:\Vidjagames\Steam\steamapps\common\VTOL VR\VTOLVR_ModLoader\ModLoader.dll</HintPath>
     </Reference>
@@ -108,6 +109,7 @@
     <Compile Include="AircraftSwitchSetup.cs" />
     <Compile Include="CustomClasses\AutoCMS.cs" />
     <Compile Include="CustomClasses\FlapsAnimator.cs" />
+    <Compile Include="CustomClasses\FormationLightSync.cs" />
     <Compile Include="CustomClasses\HPEquipRadarJammer.cs" />
     <Compile Include="CustomClasses\PanelCMS.cs" />
     <Compile Include="CustomClasses\PanelCMSP4.cs" />

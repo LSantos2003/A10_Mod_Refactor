@@ -28,9 +28,17 @@ namespace A10Mod
             }
 
             PerTeamRadarSymbol symbol = __instance.gameObject.GetComponentInChildren<PerTeamRadarSymbol>(true);
+            PlayerVehicleNetSync entity = __instance.gameObject.GetComponent<PlayerVehicleNetSync>();
 
-            bool isLocalAircraft = symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
-            bool isClientAircraft = symbol && symbol.teamASymbol == "26";
+            //Breaks out in case the actor doesn't have a playervehiclenetsync object
+
+
+            //the check to see if the actor belongs to the local player
+            bool isLocalAircraft = entity && entity.isMine && mpCheck && symbol && VTOLAPI.GetPlayersVehicleEnum() == VTOLVehicles.FA26B && AircraftInfo.AircraftSelected;
+
+            //the check to see if another player is using a custom aircraft and if their base aircraft is an fa-26
+            //NOTE: Only works if the base aircraft has a radar. Gonna have to do a different check to see if it's an AV-42
+            bool isClientAircraft = entity && !entity.isMine && symbol && symbol.teamASymbol == "26";
 
             if (isLocalAircraft || isClientAircraft)
             {

@@ -77,7 +77,8 @@ namespace A10Mod
         public static IEnumerator DetachRoutine(LoadoutConfigurator config)
         {
             yield return new WaitForSeconds(1);
-            GAUSetUp.SetUpGun(0);
+            //TODO: Uncomment this for the gau
+            //GAUSetUp.SetUpGun(0);
             config.DetachImmediate(11);
             config.DetachImmediate(12);
             config.DetachImmediate(14);

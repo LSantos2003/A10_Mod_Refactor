@@ -16,6 +16,8 @@ namespace A10Mod
         public static GameObject SEAT_ADJUST_POSE_BOUNDS;
         private static Texture2D MenuTexture;
 
+        private static GameObject storedObject = null;
+        private static Transform[] storedTransforms;
         public static void FindSwitchBounds()
         {
             SEAT_ADJUST_POSE_BOUNDS = GetChildWithName(Main.playerGameObject, ("MasterArmPoseBounds"));
@@ -157,10 +159,13 @@ namespace A10Mod
 
         public static GameObject GetChildWithName(GameObject obj, string name)
         {
+            if (obj != storedObject)
+            {
+                storedObject = obj;
+                storedTransforms = obj.GetComponentsInChildren<Transform>(true);
+            }
 
-
-            Transform[] children = obj.GetComponentsInChildren<Transform>(true);
-            foreach (Transform child in children)
+            foreach (Transform child in storedTransforms)
             {
                 if (child.name == name || child.name.Contains(name + "(clone"))
                 {
